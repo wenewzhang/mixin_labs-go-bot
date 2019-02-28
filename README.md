@@ -1,5 +1,5 @@
-# Go Mixin Messenger application development tutorial
-![cover](#)
+# Go Bitcoin tutorial based on Mixin Network I : Create bot
+![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
 A Mixin messenger bot will be created in this tutorial. The bot is powered by Go, it echo message and Bitcoin from user.
 
 Full Mixin network resource [index](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
