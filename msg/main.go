@@ -33,10 +33,12 @@ func (m *Messenger) Run(ctx context.Context, listener messenger.BlazeListener) {
 	}
 }
 
-type DefaultBlazeListener struct{}
+type Listener struct{
+  	*messenger.Messenger
+}
 
 // interface to implement if you want to handle the message
-func (l DefaultBlazeListener) OnMessage(ctx context.Context, msg messenger.MessageView, userId string) error {
+func (l *Listener) OnMessage(ctx context.Context, msg messenger.MessageView, userId string) error {
 	data, err := base64.StdEncoding.DecodeString(msg.Data)
 	// log.Printf("on message",msg.action)
 	log.Println(msg)
@@ -52,6 +54,7 @@ func (l DefaultBlazeListener) OnMessage(ctx context.Context, msg messenger.Messa
 		return nil
 	} else {
 		log.Printf("I got a message, it said: %s", string(data))
+
 		return nil
 	}
 }
@@ -59,5 +62,6 @@ func (l DefaultBlazeListener) OnMessage(ctx context.Context, msg messenger.Messa
 func main() {
 	ctx := context.Background()
 	m := NewMessenger(config.UserId, config.SessionId, config.PrivateKey)
-  go m.Run(ctx, DefaultBlazeListener{})
+	l := &Listener{m}
+  go m.Run(ctx, l)
 }
