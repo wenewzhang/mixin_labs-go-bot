@@ -48,6 +48,7 @@ go version go1.12 linux/amd64
 
 ### Create Go 's workspace
 Create a workspace for Go is strongly recommended, It will free you from package-hassle.
+
 macOS
 ```bash
 mkdir ~/workspace/go
