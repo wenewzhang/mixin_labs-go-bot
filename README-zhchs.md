@@ -197,7 +197,6 @@ go build
 
 ![mixin_messenger](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/helloworld.jpeg)
 
-### 源代码解释
 ## 源代码解释
 WebSocket是建立在TCP基础之上的全双工通讯方式，连接到Mixin Network并发送"LISTPENDINGMESSAGES"消息，服务器以后会将收到的消息转发给此程序!
 ```go
