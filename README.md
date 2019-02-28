@@ -14,7 +14,17 @@ Full Mixin network resource [index](https://github.com/awesome-mixin-network/ind
 Download the latest [Go](https://golang.org/dl/) from here.
 
 macOS
-[go1.12.darwin-amd64.pkg](https://dl.google.com/go/go1.12.darwin-amd64.pkg)
+
+Download [go1.12.darwin-amd64.pkg](https://dl.google.com/go/go1.12.darwin-amd64.pkg) and double click the package to install it, add the Go's **bin** directory to $PATH.
+```bash
+echo 'export PATH="/usr/local/opt/go/libexec/bin:$PATH"' >> ~/.bash_profile
+source  ~/.bashrc
+```
+Check Go's installation for macOS, It's works right now!
+```bash
+go version
+go version go1.11.5 darwin/amd64
+```
 
 Ubuntu 18.04
 ```bash
@@ -30,15 +40,10 @@ echo 'export PATH=/usr/local/src/go/bin:$PATH' >> ~/.bashrc
 root@n3:/usr/local/src# source  ~/.bashrc
 ```
 
-Check Go's installation
+Check Go's installation for Ubuntu, It's works right now!
 ```bash
 root@n3:/usr/local/bin# go version
 go version go1.12 linux/amd64
-```
-or
-```bash
-go version
-go version go1.11.5 darwin/amd64
 ```
 
 ### Create Go 's workspace
