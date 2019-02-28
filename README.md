@@ -9,11 +9,12 @@ Full Mixin network resource [index](https://github.com/awesome-mixin-network/ind
 2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](#)
 3. [How to create a Bitcoin wallet based on Mixin Network API](#)
 ## How to create bot in Mixin messenger and reply message to user
-## Go 1.12 installation:
+
+### Go 1.12 installation:
 Download the latest [Go](https://golang.org/dl/) from here.
 
 macOS
-(go1.12.darwin-amd64.pkg](https://dl.google.com/go/go1.12.darwin-amd64.pkg)
+[go1.12.darwin-amd64.pkg](https://dl.google.com/go/go1.12.darwin-amd64.pkg)
 
 Ubuntu 18.04
 ```bash
@@ -41,6 +42,7 @@ go version go1.11.5 darwin/amd64
 ```
 
 ### Create Go 's workspace
+Create a workspace for Go is strongly recommended, It will free you from package-hassle.
 macOS
 ```bash
 mkdir ~/workspace/go
