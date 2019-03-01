@@ -46,14 +46,14 @@ func (l *Listener) OnMessage(ctx context.Context, msg messenger.MessageView, use
 							 "&memo="
 		  log.Println(payLinkBTC)
 			BtnEOS := messenger.Button{Label: "Pay EOS 0.1", Color: "#0080FF", Action: payLinkEOS}
-			BtnBTC := messenger.Button{Label: "Pay BTC 0.001", Color: "#00FF80", Action: payLinkBTC}
+			BtnBTC := messenger.Button{Label: "Pay BTC 0.0001", Color: "#00FF80", Action: payLinkBTC}
 			if err := l.SendAppButtons(ctx, msg.ConversationId, msg.UserId, BtnEOS, BtnBTC); err != nil {
 				return err
 			}
 			return nil
 		} else if string(data) == "a"  {
-			card := messenger.AppCard{Title: "CNB", Description: "Chui Niu Bi", Action: "http://www.google.cn",
-				IconUrl: "https://images.mixin.one/0sQY63dDMkWTURkJVjowWY6Le4ICjAFuu3ANVyZA4uI3UdkbuOT5fjJUT82ArNYmZvVcxDXyNjxoOv0TAYbQTNKS=s128"}
+			card := messenger.AppCard{Title: "Pay BTC 0.0001", Description: "topay", Action: "http://www.google.cn",
+				IconUrl: "https://images.mixin.one/HvYGJsV5TGeZ-X9Ek3FEQohQZ3fE9LBEBGcOcn4c4BNHovP4fW4YB97Dg5LcXoQ1hUjMEgjbl1DPlKg1TW7kK6XP=s128"}
 			if err := l.SendAppCard(ctx, msg.ConversationId, msg.UserId, card); err != nil {
 				return err
 			}
@@ -95,8 +95,6 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 func main() {
 	ctx := context.Background()
 	m := messenger.NewMessenger(UserId, SessionId, PrivateKey)
-	//replace with your own listener
-	//go m.Run(ctx, messenger.DefaultBlazeListener{})
 	l := &Listener{m}
 	go m.Run(ctx, l)
 	select {}

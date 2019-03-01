@@ -1,10 +1,12 @@
-In [the previous chapter](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md), we created our first app, when user sends "Hello,world!", the bot reply the same message.
 
-# Receive and send Bitcoin in Mixin Messenger
+在 [上一篇教程中](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README-zhchs.md), 我们创建了自动回复消息的机器人,当用户发送消息"Hello,World!"时，机器人会自动回复同一条消息!
 
+# 第二课: 机器人接受比特币并立即退还用户
+按本篇教程后学习后完成后，你的机器人将会接受用户发送过来的加密货币，然后立即转回用户。
+完整代码如下：
 > main.go
 ```go
-package main
+fpackage main
 
 import (
 	"context"
@@ -52,14 +54,14 @@ func (l *Listener) OnMessage(ctx context.Context, msg messenger.MessageView, use
 							 "&memo="
 		  log.Println(payLinkBTC)
 			BtnEOS := messenger.Button{Label: "Pay EOS 0.1", Color: "#0080FF", Action: payLinkEOS}
-			BtnBTC := messenger.Button{Label: "Pay BTC 0.001", Color: "#00FF80", Action: payLinkBTC}
+			BtnBTC := messenger.Button{Label: "Pay BTC 0.0001", Color: "#00FF80", Action: payLinkBTC}
 			if err := l.SendAppButtons(ctx, msg.ConversationId, msg.UserId, BtnEOS, BtnBTC); err != nil {
 				return err
 			}
 			return nil
 		} else if string(data) == "a"  {
-			card := messenger.AppCard{Title: "CNB", Description: "Chui Niu Bi", Action: "http://www.google.cn",
-				IconUrl: "https://images.mixin.one/0sQY63dDMkWTURkJVjowWY6Le4ICjAFuu3ANVyZA4uI3UdkbuOT5fjJUT82ArNYmZvVcxDXyNjxoOv0TAYbQTNKS=s128"}
+			card := messenger.AppCard{Title: "Pay BTC 0.0001", Description: "topay", Action: "http://www.google.cn",
+				IconUrl: "https://images.mixin.one/HvYGJsV5TGeZ-X9Ek3FEQohQZ3fE9LBEBGcOcn4c4BNHovP4fW4YB97Dg5LcXoQ1hUjMEgjbl1DPlKg1TW7kK6XP=s128"}
 			if err := l.SendAppCard(ctx, msg.ConversationId, msg.UserId, card); err != nil {
 				return err
 			}
@@ -101,30 +103,27 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 func main() {
 	ctx := context.Background()
 	m := messenger.NewMessenger(UserId, SessionId, PrivateKey)
-	//replace with your own listener
-	//go m.Run(ctx, messenger.DefaultBlazeListener{})
 	l := &Listener{m}
 	go m.Run(ctx, l)
 	select {}
 }
 
-
 ```
-### Hello Bitcoin!
-Build the bot and execute it in the project directory.
+### 你好, 比特币!
+在项目目录下编译并执行
 ```bash
 cd mixin_labs-go-bot
 go build
 ./mixin_labs-go-bot
 ```
 
-Developer can send Bitcoin to their bots in message panel. The bot receive the Bitcoin and then send back immediately.
+开发者可以通过消息面板，给机器人转比特币，当机器人收到比特币后，马上返还给用户！
 ![transfer and tokens](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/transfer-any-tokens.jpg)
 
-User can pay 0.001 Bitcoin to bot by click the button and the 0.001 Bitcoin will be refunded in 1 second,In fact, user can pay any coin either.
+事实上，用户可以发送任意的币种给机器人，它都能马上返还！
 ![pay-link](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/Pay_and_refund_quickly.jpg)
 
-## Source code summary
+## 源代码解释
 ```go
 if msg.Category == "SYSTEM_ACCOUNT_SNAPSHOT" {
   var transfer messenger.TransferView
@@ -138,14 +137,12 @@ if msg.Category == "SYSTEM_ACCOUNT_SNAPSHOT" {
   // return l.SendPlainText(ctx, msg.ConversationId, msg.UserId, string(data))
 }
 ```
-Call mixin.Transfer to refund the coins back to user.
+调用SDK的 mixin.Transfer 将币返还用户！
 
-## Advanced usage
-
+## 高级用法
 #### APP_BUTTON_GROUP
-In some payment scenario, for example:
-The coin exchange provides coin-exchange service which transfer BTC to EOS ETH, BCH etc,
-you want show the clients many pay links with different amount, APP_BUTTON_GROUP can help you here.
+在一些应用场景，比如：有一个交易所想提供换币服务，将比特币换成以太坊，EOS,比特币现金等,
+你想显示给用户一组按钮，它们分别代表不同的币与不同的数量,APP_BUTTON_GROUP可以帮你做到这一点.
 ```go
 payLinkEOS := "https://mixin.one/pay?recipient=" +
          msg.UserId  + "&asset=" +
@@ -166,10 +163,10 @@ if err := l.SendAppButtons(ctx, msg.ConversationId, msg.UserId, BtnEOS, BtnBTC);
   return err
 }
 ```
-Here show clients two buttons for EOS and BTC, you can add more buttons in this way.
+这里演示给用户BTC与EOS两种，你还可以增加更多的按钮.
 
 #### APP_CARD
-Maybe a group of buttons too simple for you, try a pay link which show a icon: APP_CARD.
+如果你觉得一组按钮太单调了，可以试一下APP_CARD,它提供一个图标的链接
 ```go
 card := messenger.AppCard{Title: "CNB", Description: "Chui Niu Bi", Action: "http://www.google.cn",
   IconUrl: "https://images.mixin.one/0sQY63dDMkWTURkJVjowWY6Le4ICjAFuu3ANVyZA4uI3UdkbuOT5fjJUT82ArNYmZvVcxDXyNjxoOv0TAYbQTNKS=s128"}
@@ -177,6 +174,6 @@ if err := l.SendAppCard(ctx, msg.ConversationId, msg.UserId, card); err != nil {
   return err
 }
 ```
-![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/blob/master/app_card.jpg)
+![APP_CARD](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/app_card.jpg)
 
 [Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/main.go)
