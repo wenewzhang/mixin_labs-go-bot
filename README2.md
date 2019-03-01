@@ -1,4 +1,5 @@
 # Go Bitcoin tutorial based on Mixin Network : Receive and send Bitcoin in Mixin Messenger
+![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
 In [the previous chapter](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md), we created our first app, when user sends "Hello,world!", the bot reply the same message.
 
 > main.go
