@@ -5,8 +5,8 @@ A Mixin messenger bot will be created in this tutorial. The bot is powered by Go
 Full Mixin network resource [index](https://github.com/awesome-mixin-network/index_of_Mixin_Network_resource)
 
 ## What you will learn from this tutorial
-1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-go-bot#create-bot-and-receive-message-from-user)
-2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](#)
+1. [How to create bot in Mixin messenger and reply message to user](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md)
+2. [How to receive Bitcoin and send Bitcoin in Mixin Messenger](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md)
 3. [How to create a Bitcoin wallet based on Mixin Network API](#)
 ## How to create bot in Mixin messenger and reply message to user
 
