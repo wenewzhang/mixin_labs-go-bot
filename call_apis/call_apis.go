@@ -31,10 +31,15 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 )
 
 func main() {
-  fo, err := os.Create("new_users.csv")
-  if err != nil {
-      panic(err)
-  }
+	fo, err := os.OpenFile("new_users.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		panic(err)
+		return
+	}
+  // fo, err := os.Create("new_users.csv",os.O_APPEND)
+  // if err != nil {
+  //     panic(err)
+  // }
 
 	user,err := mixin.CreateAppUser("Tom cat", PinCode, UserId, SessionId, PrivateKey)
 	if err != nil {
