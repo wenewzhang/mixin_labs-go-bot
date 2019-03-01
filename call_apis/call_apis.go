@@ -4,6 +4,8 @@ import (
 	"encoding/csv"
 	"log"
 	"os"
+	"fmt"
+	"bufio"
 	mixin "github.com/MooooonStar/mixin-sdk-go/network"
 )
 
@@ -31,27 +33,40 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 )
 
 func main() {
-	fo, err := os.OpenFile("new_users.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		panic(err)
-		return
-	}
-  // fo, err := os.Create("new_users.csv",os.O_APPEND)
-  // if err != nil {
-  //     panic(err)
-  // }
+	scanner   := bufio.NewScanner(os.Stdin)
+	var PromptMsg string
+	PromptMsg  = "1: Create user and update PIN\n2: Read Bitcoin balance \n3: Read Bitcoin Address\n4: Read EOS balance\n"
+	PromptMsg += "5: Read EOS address\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n"
+	PromptMsg += "8: Withdraw bot's Bitcoin\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n"
+	PromptMsg += "q: Exit \nMake your choose:"
+	for  {
+	 fmt.Print(PromptMsg)
+	 var cmd string
+	 scanner.Scan()
+	 cmd = scanner.Text()
+	 if cmd == "q" {
+			 break
+	 }
+	 if cmd == "1" {
+		 fo, err := os.OpenFile("new_users.csv", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		 if err != nil {
+			 panic(err)
+			 return
+		 }
 
-	user,err := mixin.CreateAppUser("Tom cat", PinCode, UserId, SessionId, PrivateKey)
-	if err != nil {
-			panic(err)
-	}
-	records := [][]string {
-											{user.UserId,user.PrivateKey,user.SessionId,user.PinToken,user.PinCode},
-											}
-	w := csv.NewWriter(fo)
-	if err := w.Error(); err != nil {
-		log.Fatalln("error writing csv:", err)
-	}
-	w.WriteAll(records) // calls Flush internally
-	log.Println(user)
+		 user,err := mixin.CreateAppUser("Tom cat", PinCode, UserId, SessionId, PrivateKey)
+		 if err != nil {
+				 panic(err)
+		 }
+		 records := [][]string {
+												 {user.UserId,user.PrivateKey,user.SessionId,user.PinToken,user.PinCode},
+												 }
+		 w := csv.NewWriter(fo)
+		 if err := w.Error(); err != nil {
+			 log.Fatalln("error writing csv:", err)
+		 }
+		 w.WriteAll(records) // calls Flush internally
+		 log.Println(user)
+	 }
+ }
 }
