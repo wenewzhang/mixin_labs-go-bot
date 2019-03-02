@@ -96,7 +96,7 @@ cd mixin_labs-go-bot
 记下这些[生成的参数](https://mixin-network.gitbook.io/mixin-network/mixin-messenger-app/create-bot-account#generate-secure-parameter-for-your-app)
 它们将用于main.go中.
 
-![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/mixin_network-keys.jpg)
+![mixin_network-keys](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/mixin_network-keys.jpg)
 在项目目录下，创建main.go,将生成的参数，替换成你的！
 > main.go
 ```go
@@ -196,7 +196,7 @@ go build
 ```
 在手机安装 [Mixin Messenger](https://mixin.one/),增加机器人为好友,(比如这个机器人是7000101639) 然后发送消息给它,效果如下!
 
-![mixin_messenger](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/helloworld.jpeg)
+![mixin_messenger](https://github.com/wenewzhang/mixin_labs-php-bot/raw/master/helloworld.jpeg)
 
 ## 源代码解释
 WebSocket是建立在TCP基础之上的全双工通讯方式，连接到Mixin Network并发送"LISTPENDINGMESSAGES"消息，服务器以后会将收到的消息转发给此程序!
