@@ -180,14 +180,21 @@ func main() {
 				 SessionID2     		 := record[2]
 				 PinToken2           := record[3]
 				 PinCode2       		 := record[4]
-				 bt, err := mixin.Transfer(MASTER_UUID,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
+				 QueryInfo, err      := mixin.Transfer(MASTER_UUID,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
 											 PinCode2,PinToken2,UserID2,SessionID2,PrivateKey2)
 				 if err != nil {
 								 log.Fatal(err)
 				 }
-				 fmt.Println(string(bt))
+				 fmt.Println(string(QueryInfo))
 			 }
 		 csvFile.Close()
 	 }
+	 if cmd == "8" {
+	   QueryInfo,err := mixin.CreateAddress(BTC,BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
+		 if err != nil {
+						 log.Fatal(err)
+		 }
+		 fmt.Println(string(QueryInfo))
+   }
  }
 }
