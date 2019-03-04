@@ -190,11 +190,42 @@ func main() {
 		 csvFile.Close()
 	 }
 	 if cmd == "8" {
-	   QueryInfo,err := mixin.CreateAddress(BTC,BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
+	   QueryInfo,err := mixin.CreateAddress(mixin.GetAssetId("BTC"),BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
 		 if err != nil {
 						 log.Fatal(err)
 		 }
 		 fmt.Println(string(QueryInfo))
+		 type respData struct {
+			 Type      string `json:"type"`
+			 AddressID string `json:"address_id"`
+		 }
+		 var resp struct {
+			 Data respData `json:"data"`
+		 }
+		 err = json.Unmarshal([]byte(QueryInfo), &resp)
+		 if err == nil {
+			 fmt.Println(resp.Data.AddressID)
+		 } else { panic(err)}
    }
+	 if cmd == "a" {
+		 QueryInfo, err := mixin.VerifyPIN(PinCode, PinToken,UserId,SessionId,PrivateKey)
+		 if err != nil {
+						 log.Fatal(err)
+		 }
+		 fmt.Println(string(QueryInfo))
+	 }
+	 if cmd == "d" {
+		 QueryInfo,err := mixin.CreateAddress(mixin.GetAssetId("BTC"),BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
+		 if err != nil {
+						 log.Fatal(err)
+		 }
+		 fmt.Println(string(QueryInfo))
+		 // QueryInfo, err := mixin.DeleteAddress(PinCode, PinToken,UserId,SessionId,PrivateKey)
+		 // if err != nil {
+			// 			 log.Fatal(err)
+		 // }
+		 // fmt.Println(string(QueryInfo))
+	 }
+
  }
 }
