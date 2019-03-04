@@ -74,7 +74,7 @@ func main() {
 		 fo.Close()
 		 log.Println(user)
 	 }
-	 if cmd == "2" {
+	 if cmd == "2"|| cmd == "3" {
 		 csvFile, err := os.Open("new_users.csv")
 		 if err != nil {
             log.Fatal(err)
@@ -100,6 +100,39 @@ func main() {
 						 panic(err)
 				 }
 				 fmt.Println("User ID ",UserID, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
+				 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
+			 }
+		 csvFile.Close()
+	 }
+	 if cmd == "4"|| cmd == "5" {
+		 csvFile, err := os.Open("new_users.csv")
+		 if err != nil {
+            log.Fatal(err)
+      }
+		 reader := csv.NewReader(bufio.NewReader(csvFile))
+		 for {
+				 record, err := reader.Read()
+				 if err == io.EOF {
+					 break
+				 }
+				 if err != nil {
+					 log.Fatal(err)
+				 }
+				 UserID             := record[0]
+				 PrivateKey         := record[1]
+				 SessionID     		  := record[2]
+				 UserInfoBytes, err := mixin.ReadAsset(mixin.GetAssetId("EOS"),UserID,SessionID,PrivateKey)
+				 if err != nil {
+								 log.Fatal(err)
+				 }
+				 var UserInfoMap map[string]interface{}
+				 if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
+						 panic(err)
+				 }
+				 fmt.Println("User ID ",UserID, "'s EOS Address is: ",
+					 UserInfoMap["data"].(map[string]interface{})["account_name"],
+				   UserInfoMap["data"].(map[string]interface{})["account_tag"])
+				 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
 			 }
 		 csvFile.Close()
 	 }
