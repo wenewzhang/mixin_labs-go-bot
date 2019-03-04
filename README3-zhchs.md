@@ -222,6 +222,6 @@ mixin.Withdrawal(resp.Data.AddressID,AMOUNT,"",
                  messenger.UuidNewV4().String(),
                  PinCode, PinToken,UserId,SessionId,PrivateKey)
 ```
-#### 可以通过blockchain explore来查看进度.
+#### 可以通过[**blockchain explore**](https://www.blockchain.com/explorer)来查看提现进度.
 
 [完整的代码在这儿](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/call_apis/call_apis.py)
