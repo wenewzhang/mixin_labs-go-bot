@@ -9,6 +9,7 @@ import (
 	"bufio"
 	"io"
 	mixin "github.com/MooooonStar/mixin-sdk-go/network"
+	"github.com/MooooonStar/mixin-sdk-go/messenger"
 )
 
 const (
@@ -88,10 +89,10 @@ func main() {
 				 if err != nil {
 					 log.Fatal(err)
 				 }
-				 UserID             := record[0]
-				 PrivateKey         := record[1]
-				 SessionID     		  := record[2]
-				 UserInfoBytes, err := mixin.ReadAsset(mixin.GetAssetId("BTC"),UserID,SessionID,PrivateKey)
+				 UserID2              := record[0]
+				 PrivateKey2          := record[1]
+				 SessionID2     		  := record[2]
+				 UserInfoBytes, err   := mixin.ReadAsset(mixin.GetAssetId("CNB"),UserID2,SessionID2,PrivateKey2)
 				 if err != nil {
 								 log.Fatal(err)
 				 }
@@ -99,7 +100,7 @@ func main() {
 				 if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
 						 panic(err)
 				 }
-				 fmt.Println("User ID ",UserID, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
+				 fmt.Println("User ID ",UserID2, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
 				 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
 			 }
 		 csvFile.Close()
@@ -118,10 +119,10 @@ func main() {
 				 if err != nil {
 					 log.Fatal(err)
 				 }
-				 UserID             := record[0]
-				 PrivateKey         := record[1]
-				 SessionID     		  := record[2]
-				 UserInfoBytes, err := mixin.ReadAsset(mixin.GetAssetId("EOS"),UserID,SessionID,PrivateKey)
+				 UserID2             := record[0]
+				 PrivateKey2         := record[1]
+				 SessionID2     		 := record[2]
+				 UserInfoBytes, err  := mixin.ReadAsset(mixin.GetAssetId("EOS"),UserID2,SessionID2,PrivateKey2)
 				 if err != nil {
 								 log.Fatal(err)
 				 }
@@ -129,10 +130,62 @@ func main() {
 				 if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
 						 panic(err)
 				 }
-				 fmt.Println("User ID ",UserID, "'s EOS Address is: ",
+				 fmt.Println("User ID ",UserID2, "'s EOS Address is: ",
 					 UserInfoMap["data"].(map[string]interface{})["account_name"],
 				   UserInfoMap["data"].(map[string]interface{})["account_tag"])
 				 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
+			 }
+		 csvFile.Close()
+	 }
+	 if cmd == "6" {
+		 csvFile, err := os.Open("new_users.csv")
+		 if err != nil {
+            log.Fatal(err)
+      }
+		 reader := csv.NewReader(bufio.NewReader(csvFile))
+		 for {
+				 record, err := reader.Read()
+				 if err == io.EOF {
+					 break
+				 }
+				 if err != nil {
+					 log.Fatal(err)
+				 }
+				 UserID2             := record[0]
+				 bt, err := mixin.Transfer(UserID2,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
+											 PinCode,PinToken,UserId,SessionId,PrivateKey)
+				 if err != nil {
+		             log.Fatal(err)
+		     }
+				 fmt.Println(string(bt))
+			 }
+		 csvFile.Close()
+	 }
+	 if cmd == "7" {
+		 csvFile, err := os.Open("new_users.csv")
+		 if err != nil {
+						 log.Fatal(err)
+			 }
+		 reader := csv.NewReader(bufio.NewReader(csvFile))
+		 for {
+				 record, err := reader.Read()
+				 if err == io.EOF {
+					 break
+				 }
+				 if err != nil {
+					 log.Fatal(err)
+				 }
+				 UserID2             := record[0]
+				 PrivateKey2         := record[1]
+				 SessionID2     		 := record[2]
+				 PinToken2           := record[3]
+				 PinCode2       		 := record[4]
+				 bt, err := mixin.Transfer(MASTER_UUID,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
+											 PinCode2,PinToken2,UserID2,SessionID2,PrivateKey2)
+				 if err != nil {
+								 log.Fatal(err)
+				 }
+				 fmt.Println(string(bt))
 			 }
 		 csvFile.Close()
 	 }
