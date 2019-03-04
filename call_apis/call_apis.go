@@ -2,18 +2,20 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"log"
 	"os"
 	"fmt"
 	"bufio"
+	"io"
 	mixin "github.com/MooooonStar/mixin-sdk-go/network"
 )
 
 const (
-	UserId    = "21042518-85c7-4903-bb19-f311813d1f51"
-	PinCode   = "911424"
-	SessionId = "4267b63d-3daa-449e-bc13-970aa0357776"
-	PinToken  = "gUUxpm3fPRVkKZNwA/gk10SHHDtR8LmxO+N6KbsZ/jymmwwVitUHKgLbk1NISdN8jBvsYJgF/5hbkxNnCJER5XAZ0Y35gsAxBOgcFN8otsV6F0FAm5TnWN8YYCqeFnXYJnqmI30IXJTAgMhliLj7iZsvyY/3htaHUUuN5pQ5F5s="
+	UserId          = "21042518-85c7-4903-bb19-f311813d1f51"
+	PinCode         = "911424"
+	SessionId       = "4267b63d-3daa-449e-bc13-970aa0357776"
+	PinToken        = "gUUxpm3fPRVkKZNwA/gk10SHHDtR8LmxO+N6KbsZ/jymmwwVitUHKgLbk1NISdN8jBvsYJgF/5hbkxNnCJER5XAZ0Y35gsAxBOgcFN8otsV6F0FAm5TnWN8YYCqeFnXYJnqmI30IXJTAgMhliLj7iZsvyY/3htaHUUuN5pQ5F5s="
 	//please delele the blank of PrivateKey the before each line
 	PrivateKey = `-----BEGIN RSA PRIVATE KEY-----
 MIICXQIBAAKBgQCDXiWJRLe9BzPtXmcVe6acaFTY9Ogb4Hc2VHFjKFsp7QRVCytx
@@ -30,6 +32,9 @@ iKTR3dA6eiM8qiEQw6nWgniFscpf3PnCx/Iu3U/m5mNr743GhM+eXSj7136b209I
 YfEoQiPxRz8O/W+NBV0CQQDVPNqJlFD34MC9aQN42l3NV1hDsl1+nSkWkXSyhhNR
 MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 -----END RSA PRIVATE KEY-----`
+	MASTER_UUID     = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
+	BTC_WALLET_ADDR = "14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C"
+	AMOUNT          = "0.001"
 )
 
 func main() {
@@ -66,7 +71,37 @@ func main() {
 			 log.Fatalln("error writing csv:", err)
 		 }
 		 w.WriteAll(records) // calls Flush internally
+		 fo.Close()
 		 log.Println(user)
+	 }
+	 if cmd == "2" {
+		 csvFile, err := os.Open("new_users.csv")
+		 if err != nil {
+            log.Fatal(err)
+      }
+		 reader := csv.NewReader(bufio.NewReader(csvFile))
+		 for {
+				 record, err := reader.Read()
+				 if err == io.EOF {
+					 break
+				 }
+				 if err != nil {
+					 log.Fatal(err)
+				 }
+				 UserID             := record[0]
+				 PrivateKey         := record[1]
+				 SessionID     		  := record[2]
+				 UserInfoBytes, err := mixin.ReadAsset(mixin.GetAssetId("BTC"),UserID,SessionID,PrivateKey)
+				 if err != nil {
+								 log.Fatal(err)
+				 }
+				 var UserInfoMap map[string]interface{}
+				 if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
+						 panic(err)
+				 }
+				 fmt.Println("User ID ",UserID, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
+			 }
+		 csvFile.Close()
 	 }
  }
 }
