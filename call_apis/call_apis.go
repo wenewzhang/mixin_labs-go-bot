@@ -38,6 +38,11 @@ MpobtV1a7IgJGyt5HxBzgNlBNOayICRf0rRjvCdw6aTP
 	AMOUNT          = "0.001"
 )
 
+type respData struct {
+	Type      string `json:"type"`
+	AddressID string `json:"address_id"`
+}
+
 func main() {
 	scanner   := bufio.NewScanner(os.Stdin)
 	var PromptMsg string
@@ -92,7 +97,7 @@ func main() {
 				 UserID2              := record[0]
 				 PrivateKey2          := record[1]
 				 SessionID2     		  := record[2]
-				 UserInfoBytes, err   := mixin.ReadAsset(mixin.GetAssetId("CNB"),UserID2,SessionID2,PrivateKey2)
+				 UserInfoBytes, err   := mixin.ReadAsset(mixin.GetAssetId("BTC"),UserID2,SessionID2,PrivateKey2)
 				 if err != nil {
 								 log.Fatal(err)
 				 }
@@ -152,7 +157,7 @@ func main() {
 					 log.Fatal(err)
 				 }
 				 UserID2             := record[0]
-				 bt, err := mixin.Transfer(UserID2,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
+				 bt, err := mixin.Transfer(UserID2,AMOUNT,mixin.GetAssetId("BTC"),"",messenger.UuidNewV4().String(),
 											 PinCode,PinToken,UserId,SessionId,PrivateKey)
 				 if err != nil {
 		             log.Fatal(err)
@@ -180,7 +185,7 @@ func main() {
 				 SessionID2     		 := record[2]
 				 PinToken2           := record[3]
 				 PinCode2       		 := record[4]
-				 QueryInfo, err      := mixin.Transfer(MASTER_UUID,AMOUNT,mixin.GetAssetId("CNB"),"",messenger.UuidNewV4().String(),
+				 QueryInfo, err      := mixin.Transfer(MASTER_UUID,AMOUNT,mixin.GetAssetId("BTC"),"",messenger.UuidNewV4().String(),
 											 PinCode2,PinToken2,UserID2,SessionID2,PrivateKey2)
 				 if err != nil {
 								 log.Fatal(err)
@@ -195,16 +200,15 @@ func main() {
 						 log.Fatal(err)
 		 }
 		 fmt.Println(string(QueryInfo))
-		 type respData struct {
-			 Type      string `json:"type"`
-			 AddressID string `json:"address_id"`
-		 }
+
 		 var resp struct {
 			 Data respData `json:"data"`
 		 }
 		 err = json.Unmarshal([]byte(QueryInfo), &resp)
 		 if err == nil {
 			 fmt.Println(resp.Data.AddressID)
+			 mixin.Withdrawal(resp.Data.AddressID,AMOUNT,"",messenger.UuidNewV4().String(),
+		 		PinCode, PinToken,UserId,SessionId,PrivateKey)
 		 } else { panic(err)}
    }
 	 if cmd == "a" {
@@ -220,12 +224,31 @@ func main() {
 						 log.Fatal(err)
 		 }
 		 fmt.Println(string(QueryInfo))
-		 // QueryInfo, err := mixin.DeleteAddress(PinCode, PinToken,UserId,SessionId,PrivateKey)
-		 // if err != nil {
-			// 			 log.Fatal(err)
-		 // }
-		 // fmt.Println(string(QueryInfo))
+		 var resp struct {
+			 Data respData `json:"data"`
+		 }
+		 err = json.Unmarshal([]byte(QueryInfo), &resp)
+		 if err == nil {
+			 fmt.Println(resp.Data.AddressID)
+			 DelInfo, _ := mixin.DeleteAddress(resp.Data.AddressID,PinCode, PinToken,UserId,SessionId,PrivateKey)
+			 fmt.Println(string(DelInfo))
+		 } else { panic(err)}
 	 }
-
+	 if cmd == "r" {
+		 QueryInfo,err := mixin.CreateAddress(mixin.GetAssetId("BTC"),BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
+		 if err != nil {
+						 log.Fatal(err)
+		 }
+		 fmt.Println(string(QueryInfo))
+		 var resp struct {
+			 Data respData `json:"data"`
+		 }
+		 err = json.Unmarshal([]byte(QueryInfo), &resp)
+		 if err == nil {
+			 fmt.Println(resp.Data.AddressID)
+			 AddrInfo, _ := mixin.ReadAddress(resp.Data.AddressID,UserId,SessionId,PrivateKey)
+			 fmt.Println(string(AddrInfo))
+		 } else { panic(err)}
+	 }
  }
 }
