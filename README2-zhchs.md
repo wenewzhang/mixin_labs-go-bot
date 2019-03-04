@@ -119,10 +119,10 @@ go build
 ```
 
 开发者可以通过消息面板，给机器人转比特币，当机器人收到比特币后，马上返还给用户！
-![transfer and tokens](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/transfer-any-tokens.jpg)
+![transfer and tokens](https://github.com/wenewzhang/mixin_network-nodejs-bot2/raw/master/transfer-any-tokens.jpg)
 
 事实上，用户可以发送任意的币种给机器人，它都能马上返还！
-![pay-link](https://github.com/wenewzhang/mixin_network-nodejs-bot2/blob/master/Pay_and_refund_quickly.jpg)
+![pay-link](https://github.com/wenewzhang/mixin_network-nodejs-bot2/raw/master/Pay_and_refund_quickly.jpg)
 
 ## 源代码解释
 ```go
@@ -175,6 +175,6 @@ if err := l.SendAppCard(ctx, msg.ConversationId, msg.UserId, card); err != nil {
   return err
 }
 ```
-![APP_CARD](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/app_card.jpg)
+![APP_CARD](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/app_card.jpg)
 
-[Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/main.go)
+[Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/main.go)
