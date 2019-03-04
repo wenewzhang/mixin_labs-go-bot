@@ -1,19 +1,18 @@
-We have created a bot to [echo message](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md) and [echo Bitcoin](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md).
+我们已经创建过一个[回复消息](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md)的机器人和一个能自动[支付比特币](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md)的机器人.
 
-# What you will learn from this chapter
-1. How to create Bitcoin wallet
-2. How to read Bitcoin balance
-3. How to send Bitcoin with zero transaction fee and confirmed in 1 second
-4. How to send Bitcoin to other wallet
+# 通过本教程的学习，你可以学到如下内容
+1. 如何创建一个比特币钱包.
+2. 如何读取比特币钱包的余额.
+3. 如何实现免手续费支付比特币并1秒到账
+4. 如何将Mixin Network的比特币提现到你的冷钱包或第三方交易所.
 
-## Create a Bitcoin wallet by Mixin Network GO SDK
-Pre-request: You should have a Mixin Network account. Create an account can be done by one line code:
+## 通过Mixin Network GO SDK创建一个比特币钱包
+前期准备：你要有一个Mixin Network账户。如果没有账户，一行代码就能创建一个
 
 ```go
   user,err := mixin.CreateAppUser("Tom cat", PinCode, UserId, SessionId, PrivateKey)
 ```
-The function in Go SDK create a RSA key pair automatically, then call Mixin Network to create an account. last the function return all account information.
-
+上面的语句会在本地创建一个RSA密钥对，然后调用Mixin Network来创建帐号，最后输出帐号信息,格试如下：
 ```go
 //Create User api include all account information
 type User struct {
@@ -31,9 +30,9 @@ type User struct {
 
 ```
 
-Now you need to carefully keep the account information. You need these information to read asset balance and other content.
-### Create Bitcoin wallet for the Mixin Network account
-The Bitcoin  wallet is not generated automatically at same time when we create Mixin Network account. Read Bitcoin asset once to generate a Bitcoin wallet.
+现在你需要小心保管好你的帐号信息，在读取该账户的比特币资产余额或者进行其他操作时，将需要用到这些信息.
+### 给新建的帐号创建一个比特币钱包
+新账号并不默认内置比特币钱包， 现在读一下比特币余额就可以创建一个比特币钱包。
 ```go
 UserInfoBytes, err   := mixin.ReadAsset(mixin.GetAssetId("BTC"),UserID2,SessionID2,PrivateKey2)
 if err != nil {
@@ -46,7 +45,7 @@ if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
 fmt.Println("User ID ",UserID2, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
 ```
-You can found information about Bitcoin asset in the account. Public key is the Bitcoin deposit address. Full response of read  Bitcoin asset is
+创建的帐号的比特币资产详细信息如下，其中public key就是比特币的存币地址:
 ```bash
 {"data":{"type":"asset","asset_id":"c6d0c728-2624-429b-8e0d-d9d19b6592fa",
 "chain_id":"c6d0c728-2624-429b-8e0d-d9d19b6592fa","symbol":"BTC","name":"Bitcoin",
@@ -55,23 +54,25 @@ You can found information about Bitcoin asset in the account. Public key is the 
 "account_tag":"","price_btc":"1","price_usd":"3776.98110465","change_btc":"0",
 "change_usd":"-0.022213428553059168","asset_key":"c6d0c728-2624-429b-8e0d-d9d19b6592fa","confirmations":6,"capitalization":0}}
 ```
-The API provide many information about Bitcoin asset.
-* Deposit address:[public_key]
+
+这个API能够提供若干与比特币有关的信息:
+* 存币地址:[public_key]
 * Logo: [icon_url]
-* Asset name:[name]
-* Asset uuid in Mixin network: [asset_key]
-* Price in USD from Coinmarketcap.com: [price_usd]
-* Least confirmed blocks before deposit is accepted by Mixin network:[confirmations]
+* 资产名字:[name]
+* 资产在Mixin Network的uuid: [asset_key]
+* 对美元的价格(Coinmarketcap.com提供): [price_usd]
+* 存币时确认的区块数量:[confirmations]
 
 
-### Private key?
-Where is Bitcoin private key? The private key is protected by multi signature inside Mixin Network so it is invisible for user. Bitcoin asset can only be withdraw to other address when user provide correct RSA private key signature, PIN code and Session key.
+### 比特币私钥呢？
+比特币的私钥呢？这个私钥被Mixin Network通过多重签名保护，所以对用户来说是不可见的,比特币资产的提现和转账都需要用户提供正确的的RSA签名,PIN代码与会话密钥才能完成.
 
-### Not only Bitcoin, but also Ethereum, EOS
-The account not only contain a Bitcoin wallet, but also contains wallet for Ethereum, EOS, etc. Full blockchain support [list](https://mixin.one/network/chains). All ERC20 Token and EOS token are supported by the account.
+### 不只是比特币，还有以太坊，EOS等
+这个帐号不只支持比特币，还支持以太坊，EOS等, 完整的区块链支持[列表](https://mixin.one/network/chains). 这个账户同时也支持所有的 ERC20 代币与 EOS 代币.
 
-Create other asset wallet is same as create Bitcoin wallet, just read the asset.
-#### Mixin Network support cryptocurrencies (2019-02-19)
+创建其它的币的钱包与创建比特币钱包过程一样，读对应的资产余额就可以.
+
+#### Mixin Network 当前支持的加密货币 (2019-02-19)
 
 |crypto |uuid in Mixin Network
 |---|---
@@ -90,8 +91,9 @@ Create other asset wallet is same as create Bitcoin wallet, just read the asset.
 |ZEC|c996abc9-d94e-4494-b1cf-2a3fd3ac5714
 |BCH|fd11b6e3-0b87-41f1-a41f-f0e9b49e5bf0
 
-If you read EOS deposit address, the deposit address is composed of two parts: account_name and account tag. When you transfer EOS token to your account in Mixin network, you should fill both account name and memo. The memo content is value of 'account_tag'.
-Result of read EOS asset is:
+EOS的存币地址与其它的币有些不同，它由两部分组成： account_name and account tag, 如果你向Mixin Network存入EOS，你需要填两项数据： account name 是**eoswithmixin**,备注里输入你的account_tag,比如**0aa2b00fad2c69059ca1b50de2b45569**.
+
+EOS的资产余额返回结果如下:
 ```bash
 {'data': {'type': 'asset', 'asset_id': '6cfe566e-4aad-470b-8c9a-2fd35b49c68d',
 'chain_id': '6cfe566e-4aad-470b-8c9a-2fd35b49c68d',
@@ -104,20 +106,16 @@ Result of read EOS asset is:
 'confirmations': 64, 'capitalization': 0}}
 ```
 
-### Deposit Bitcoin and read balance
-Now you can deposit Bitcoin into the deposit address.
+### 存入比特币与读取比特币余额
+现在，你可以向比特币的钱包存币了。
 
-This is maybe too expensive for this tutorial. There is a free and lightening fast solution to deposit Bitcoin: add the address in your Mixin messenger account withdrawal address and withdraw small amount Bitcoin from your account to the address. It is free and confirmed instantly because they are both on Mixin Network.
+当然，在比特币网络里转币，手续费是相当贵的，费用的中位数在0.001BTC,按当前4000美元的价格，在4美元左右，有一个方便的办法，如果你有[Mixin Messenger](https://mixin.one/messenger)帐号，里面并且有比特币的话，可以直接提现比特币到新创建的帐号的比特币充值地址，它们在同一个Mixin Network网络内，手续费为0，而且1秒到账。
 
-Now you can read Bitcoin balance of the account.
-```go
-UserInfoBytes, err  := mixin.ReadAsset(mixin.GetAssetId("BTC"),UserID2,SessionID2,PrivateKey2)
-```
-### Send Bitcoin inside Mixin Network to enjoy instant confirmation and ZERO transaction fee
-Any transaction happen between Mixin network account is free and is confirmed in 1 second.
+### Mixin Network网内免手续费的，并且即时确认
+任何币在Mixin Network内部的交易，都是无手续费的，并且立刻到账。
 
-#### Send Bitcoin to another Mixin Network account
-We can send Bitcoin to our bot through Mixin Messenger, and then transfer Bitcoin from bot to new user.
+#### Mixin Network帐号之间的比特币支付
+通过Mixin Messenger，我们可以先转比特币给机器人，然后让机器人转币给新用户。
 
 ```go
 UserID2             := record[0]
@@ -133,9 +131,9 @@ if err != nil {
 }
 fmt.Println(string(QueryInfo))
 ```
-
-Read bot's Bitcoin balance to confirm the transaction.
-Caution: **UserID2,SessionID2,PrivateKey2** is for the New User!
+下面的代码，可以读取比特币钱包余额.
+读取Bitcoin的余额，来确认比特币是不是转成功了！
+注意**UserID2,SessionID2,PrivateKey2**是新用户的。
 ```go
   UserID2              := record[0]
   PrivateKey2          := record[1]
@@ -153,13 +151,15 @@ Caution: **UserID2,SessionID2,PrivateKey2** is for the New User!
   fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
 ```
 
-### Send Bitcoin to another Bitcoin exchange or wallet
-If you want to send Bitcoin to another exchange or wallet, you need to know the destination deposit address, then add the address in withdraw address list of the Mixin network account.
+### 如何将比特币存入你的冷钱包或者第三方交易所
+如果你希望将币存入你的冷钱包或者第三方交易所, 先要得到冷钱包或者你在第三方交易所的钱包地址，然后将钱包地址提交到Mixin Network.
 
-Pre-request: Withdrawal address is added and know the Bitcoin withdrawal fee
+- **要点提示**:
+- 1.提现是需要支付收续费的;
+- 2.准备好比特币包地址!
 
-#### Add destination address to withdrawal address list
-Call createAddress, the ID of address will be returned in result of API and is required soon.
+#### 增加目的钱包地址到Mixin Network
+调用CreateAddress API, 将会返回一个address_id,下一步的提现操作会用到这个id。
 ```go
 QueryInfo,err := mixin.CreateAddress(mixin.GetAssetId("BTC"),BTC_WALLET_ADDR,"BTC withdrawal",PinCode, PinToken,UserId,SessionId,PrivateKey)
 if err != nil {
@@ -175,8 +175,7 @@ if err == nil {
   fmt.Println(resp.Data.AddressID)
 }
 ```
-The **14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C** is a Bitcoin wallet address, Output like below,
-The API result contains the withdrawal address ID, fee is 0.0034802 BTC.                                                   
+这里的 **14T129GTbXXPGXXvZzVaNLRFPeHXD1C25C** 就是一个比特币钱包地址, 如下所示，提现费用是0.0034802 BTC, address_id  是"345855b5-56a5-4f3b-ba9e-d99601ef86c1".                                                                                                    
 ```bash
 {'data': {'type': 'address', 'address_id': '47998e2f-2761-45ce-9a6c-6f167b20c78b',
 'asset_id': 'c6d0c728-2624-429b-8e0d-d9d19b6592fa',
@@ -185,7 +184,7 @@ The API result contains the withdrawal address ID, fee is 0.0034802 BTC.
 'fee': '0.0034802', 'reserve': '0', 'dust': '0.0001',
 'updated_at': '2019-02-26T00:03:05.028140704Z'}}
 ```
-If you want create a EOS address, call it like below:
+如果你操作的是EOS, 示例代码如下：
 ```go
 EOS_WALLET_ADDR  = "3e2f70914c8e8abbf60040207c8aae62";
 EOS_ACCOUNT_NAME = "eoswithmixin";
@@ -206,7 +205,7 @@ err = json.Unmarshal([]byte(QueryInfo), &resp)
 if err == nil {
   fmt.Println(resp.Data.AddressID)
 ```
-#### Read withdraw fee anytime
+#### 创建提现地址成功后，你可以用 ReadAddress 读取最新的提现费。
 ```go
 AddrInfo, _ := mixin.ReadAddress(resp.Data.AddressID,UserId,SessionId,PrivateKey)
 var resp2 struct {
@@ -216,14 +215,13 @@ fmt.Println(string(AddrInfo))
 json.Unmarshal([]byte(AddrInfo), &resp2)
 fmt.Println(resp2.Data.AddressID," fee:",resp2.Data.Fee)
 ```
-
-#### Send Bitcoin to destination address
-Submit the withdrawal request to Mixin Network, the resp.Data.AddressID is the address id it's return by CreateAddress
+#### 提交提现请求，Mixin Network会即时处理提现请求.
+提交提现请求到Mixin Network, resp.Data.AddressID就是CreateAddress创建的。
 ```go
 mixin.Withdrawal(resp.Data.AddressID,AMOUNT,"",
                  messenger.UuidNewV4().String(),
                  PinCode, PinToken,UserId,SessionId,PrivateKey)
 ```
-#### Confirm the transaction in blockchain explore
+#### 可以通过blockchain explore来查看进度.
 
-[Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/call_apis/call_apis.py)
+[完整的代码在这儿](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/call_apis/call_apis.py)
