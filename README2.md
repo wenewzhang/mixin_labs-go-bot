@@ -178,6 +178,6 @@ if err := l.SendAppCard(ctx, msg.ConversationId, msg.UserId, card); err != nil {
   return err
 }
 ```
-![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/blob/master/app_card.jpg)
+![APP_CARD](https://github.com/wenewzhang/mixin_labs-python-bot/raw/master/app_card.jpg)
 
 [Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/main.go)
