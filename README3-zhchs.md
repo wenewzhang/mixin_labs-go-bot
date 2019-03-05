@@ -1,12 +1,13 @@
+# 基于Mixin Network的Go语言比特币开发教程 : 创建一个比特币钱包
+![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
 我们已经创建过一个[回复消息](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md)的机器人和一个能自动[支付比特币](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md)的机器人.
 
-# 通过本教程的学习，你可以学到如下内容
+## 通过本教程的学习，你可以学到如下内容
 1. 如何创建一个比特币钱包.
 2. 如何读取比特币钱包的余额.
 3. 如何实现免手续费支付比特币并1秒到账
 4. 如何将Mixin Network的比特币提现到你的冷钱包或第三方交易所.
 
-## 通过Mixin Network GO SDK创建一个比特币钱包
 前期准备：你要有一个Mixin Network账户。如果没有账户，一行代码就能创建一个
 
 ```go
