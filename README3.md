@@ -1,3 +1,4 @@
+# Go Bitcoin tutorial based on Mixin Network : Create a Bitcoin wallet
 We have created a bot to [echo message](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md) and [echo Bitcoin](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md).
 
 # What you will learn from this chapter
@@ -6,7 +7,7 @@ We have created a bot to [echo message](https://github.com/wenewzhang/mixin_labs
 3. How to send Bitcoin with zero transaction fee and confirmed in 1 second
 4. How to send Bitcoin to other wallet
 
-## Create a Bitcoin wallet by Mixin Network GO SDK
+
 Pre-request: You should have a Mixin Network account. Create an account can be done by one line code:
 
 ```go
