@@ -18,7 +18,7 @@ macOS
 Download [go1.12.darwin-amd64.pkg](https://dl.google.com/go/go1.12.darwin-amd64.pkg) and double click the package to install it, add the Go's **bin** directory to $PATH.
 ```bash
 echo 'export PATH="/usr/local/opt/go/libexec/bin:$PATH"' >> ~/.bash_profile
-source  ~/.bashrc
+source  ~/.bash_profile
 ```
 Check installation of macOS, It's works right now!
 ```bash

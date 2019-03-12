@@ -226,6 +226,6 @@ mixin.Withdrawal(resp.Data.AddressID,AMOUNT,"",
                  messenger.UuidNewV4().String(),
                  PinCode, PinToken,UserId,SessionId,PrivateKey)
 ```
-#### Confirm the transaction in blockchain explore
+#### Confirm the transaction in [Blockchain Explore](https://www.blockchain.com/explorer)
 
 [Full source code](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/call_apis/call_apis.py)

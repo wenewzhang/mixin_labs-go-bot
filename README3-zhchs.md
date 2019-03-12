@@ -13,7 +13,7 @@
 ```go
   user,err := mixin.CreateAppUser("Tom cat", PinCode, UserId, SessionId, PrivateKey)
 ```
-上面的语句会在本地创建一个RSA密钥对，然后调用Mixin Network来创建帐号，最后输出帐号信息,格试如下：
+上面的语句会在本地创建一个RSA密钥对，然后调用Mixin Network来创建帐号，最后输出帐号信息,格式如下：
 ```go
 //Create User api include all account information
 type User struct {
@@ -46,7 +46,7 @@ if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
 fmt.Println("User ID ",UserID2, "'s Bitcoin Address is: ",UserInfoMap["data"].(map[string]interface{})["public_key"])
 fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance"])
 ```
-创建的帐号的比特币资产详细信息如下，其中public key就是比特币的存币地址:
+创建的帐号的比特币资产详细信息如下，其中public key就是比特币的钱包地址:
 ```bash
 {"data":{"type":"asset","asset_id":"c6d0c728-2624-429b-8e0d-d9d19b6592fa",
 "chain_id":"c6d0c728-2624-429b-8e0d-d9d19b6592fa","symbol":"BTC","name":"Bitcoin",
@@ -57,7 +57,7 @@ fmt.Println("Balance is: ",UserInfoMap["data"].(map[string]interface{})["balance
 ```
 
 这个API能够提供若干与比特币有关的信息:
-* 存币地址:[public_key]
+* 钱包地址:[public_key]
 * Logo: [icon_url]
 * 资产名字:[name]
 * 资产在Mixin Network的uuid: [asset_key]
@@ -155,7 +155,7 @@ fmt.Println(string(QueryInfo))
 ### 如何将比特币存入你的冷钱包或者第三方交易所
 如果你希望将币存入你的冷钱包或者第三方交易所, 先要得到冷钱包或者你在第三方交易所的钱包地址，然后将钱包地址提交到Mixin Network.
 
-- **要点提示**:
+### **要点提示**:
 - 1.提现是需要支付收续费的;
 - 2.准备好比特币包地址!
 
