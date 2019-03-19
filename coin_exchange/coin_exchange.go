@@ -71,7 +71,7 @@ func ReadAssetInfo(asset_id string) ( map[string]interface{}, string) {
   var UserInfoMap map[string]interface{}
   csvFile, err := os.Open("mybitcoin_wallet.csv")
   if err != nil {
-         log.Fatal(err)
+    log.Fatal(err)
   }
   reader := csv.NewReader(bufio.NewReader(csvFile))
   record, err := reader.Read()
@@ -105,10 +105,6 @@ func GetWalletInfo() ( string, string, string, string, string) {
   if err != nil {
     log.Fatal(err)
   }
-  // fmt.Println(record[3])
-  // PrivateKey2           := record[0]
-  // SessionID2      		  := record[2]
-  // UserID2               := record[3]
   csvFile.Close()
   return record[0], record[1], record[2], record[3], record[4]
 }
@@ -156,7 +152,7 @@ func main() {
 	var PromptMsg string
 	PromptMsg  = "1: Create Wallet\n2: Read Bitcoin balance & Address \n3: Read USDT balance & Address\n4: Read EOS balance & address\n"
 	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
-	PromptMsg += "8: Withdraw bot's Bitcoin\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n"
+	PromptMsg += "8: pay 1 USDT buy BTC\n8: Withdraw bot's Bitcoin\n9: Read Snapshots\nd: Create Address and Delete it\nr: Create Address and read it\n"
 	PromptMsg += "q: Exit \nMake your choose:"
 	for  {
 	 fmt.Print(PromptMsg)
@@ -267,6 +263,27 @@ func main() {
 									v.(map[string]interface{})["exchanges"],
 								 )
 		}
+	}
+	if cmd == "8" {
+		packUuid, _ := uuid.FromString(mixin.GetAssetId("BTC"))
+		pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
+		memo := base64.StdEncoding.EncodeToString(pack)
+		// fmt.Println(memo)
+		priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+		bt, err := mixin.Transfer(EXIN_BOT,"1",mixin.GetAssetId("USDT"),memo,
+														 messenger.UuidNewV4().String(),
+														 uPIN,pToken,userID,sID,priKey)
+		if err != nil {
+				log.Fatal(err)
+		}
+		fmt.Println(string(bt))
+	}
+	if cmd == "9" {
+		priKey, _, sID, userID, _ := GetWalletInfo()
+		fmt.Println(time.Now().AddDate(0, 0, -1))
+		data, err := mixin.NetworkSnapshots(mixin.GetAssetId("BTC"), time.Now().AddDate(0, 0, -1), false, 10, userID, sID, priKey)
+		if err != nil { log.Fatal(err) }
+		log.Println(string(data))
 	}
 	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
