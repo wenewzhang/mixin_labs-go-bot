@@ -39,8 +39,8 @@ adY8KDUDExvQuOB3gw/k5LcuRx//KHblN4XNDDtsYqg8XBfPXuuM9Vj4ixF5hE4J
 mrp+F1U3GBhFvryQrHn1AkEAlDLpBgaxt4kpCeXUr/9lUoKsF/8taOlS3IZjRbBJ
 A3BlaWdHIvUHhqpVbfeCYv7m3GnIs+Kfo1I56haIRVFrNw==
 -----END RSA PRIVATE KEY-----`
-	// EXIN_BOT   = "61103d28-3ac2-44a2-ae34-bd956070dab1"
-	EXIN_BOT   = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
+	EXIN_BOT   = "61103d28-3ac2-44a2-ae34-bd956070dab1"
+	// EXIN_BOT   = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
 )
 
 type OrderAction struct {
@@ -53,6 +53,12 @@ type Error struct {
 	Description string `json:"description"`
 	trace       string
 }
+
+// type respData struct {
+// 	Zero      string `json:"0"`
+// 	One string `json:"1"`
+// 	Two       string `json:"2"`
+// }
 
 func (e Error) Error() string {
 	bt, _ := json.Marshal(e)
@@ -81,7 +87,7 @@ func ReadAssetInfo(asset_id string) ( map[string]interface{}, string) {
   if err != nil {
           log.Fatal(err)
   }
-  // fmt.Println(string(UserInfoBytes))
+  fmt.Println(string(UserInfoBytes))
   if err := json.Unmarshal(UserInfoBytes, &UserInfoMap); err != nil {
       panic(err)
   }
@@ -120,7 +126,7 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 		return nil, err
 	}
 	defer resp.Body.Close()
-  fmt.Println(resp.Body)
+  // fmt.Println(resp.Body)
 	bt, err := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
 		var resp struct {
@@ -149,7 +155,7 @@ func main() {
   scanner   := bufio.NewScanner(os.Stdin)
 	var PromptMsg string
 	PromptMsg  = "1: Create Wallet\n2: Read Bitcoin balance & Address \n3: Read USDT balance & Address\n4: Read EOS balance & address\n"
-	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n"
+	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
 	PromptMsg += "8: Withdraw bot's Bitcoin\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n"
 	PromptMsg += "q: Exit \nMake your choose:"
 	for  {
@@ -229,9 +235,39 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(string(priceInfo[:]))
-	}
 
+		var marketInfo map[string]interface{}
+		err = json.Unmarshal([]byte(priceInfo), &marketInfo)
+    fmt.Println("Asset | price | min | max | exchanges")
+		for _, v := range (marketInfo["data"].(map[string]interface{})) {
+			fmt.Println(v.(map[string]interface{})["exchange_asset_symbol"],"/",
+									v.(map[string]interface{})["base_asset_symbol"],
+									v.(map[string]interface{})["price"],
+									v.(map[string]interface{})["minimum_amount"],
+									v.(map[string]interface{})["maximum_amount"],
+									v.(map[string]interface{})["exchanges"],
+								 )
+		}
+	}
+	if cmd == "7" {
+		priceInfo, err := GetMarketPrice(mixin.GetAssetId("BTC"))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		var marketInfo map[string]interface{}
+		err = json.Unmarshal([]byte(priceInfo), &marketInfo)
+    fmt.Println("Asset | price | min | max | exchanges")
+		for _, v := range (marketInfo["data"].(map[string]interface{})) {
+			fmt.Println(v.(map[string]interface{})["exchange_asset_symbol"],"/",
+									v.(map[string]interface{})["base_asset_symbol"],
+									v.(map[string]interface{})["price"],
+									v.(map[string]interface{})["minimum_amount"],
+									v.(map[string]interface{})["maximum_amount"],
+									v.(map[string]interface{})["exchanges"],
+								 )
+		}
+	}
 	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
