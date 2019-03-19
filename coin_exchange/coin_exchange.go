@@ -11,13 +11,14 @@ import (
     "os"
     "bufio"
     mixin "github.com/MooooonStar/mixin-sdk-go/network"
+		"github.com/MooooonStar/mixin-sdk-go/messenger"
 )
 
 const (
-	UserId    = "21042518-85c7-4903-bb19-f311813d1f51"
-	PinCode   = "540806"
-	SessionId = "806a2ea0-e1e0-409f-beac-d6410af7bf93"
-	PinToken  = "N3HqYZzHQ67/bMXjm8M9NotKsxWabSWEy1mYICFiaFPUQaRkWa+AiUQsEoKoeRtnbH4sy912vn9/RII//yO9GF94MAACWSShUubbADOmJjGKvgxBRSMHi9h7I4jCh1LQhkUq7iUKVY5GBGCWp83ZbcyvEGWlBnvOcqb010jhMpE="
+	UserId     = "21042518-85c7-4903-bb19-f311813d1f51"
+	PinCode    = "540806"
+	SessionId  = "806a2ea0-e1e0-409f-beac-d6410af7bf93"
+	PinToken   = "N3HqYZzHQ67/bMXjm8M9NotKsxWabSWEy1mYICFiaFPUQaRkWa+AiUQsEoKoeRtnbH4sy912vn9/RII//yO9GF94MAACWSShUubbADOmJjGKvgxBRSMHi9h7I4jCh1LQhkUq7iUKVY5GBGCWp83ZbcyvEGWlBnvOcqb010jhMpE="
 	//please delele the blank of PrivateKey the before each line
 	PrivateKey = `-----BEGIN RSA PRIVATE KEY-----
 MIICXgIBAAKBgQCOJB1fIMpyPCh4pPM0cZMhYfDAA2IwgYrjwYFT0EGlkjJW8TK5
@@ -34,6 +35,8 @@ adY8KDUDExvQuOB3gw/k5LcuRx//KHblN4XNDDtsYqg8XBfPXuuM9Vj4ixF5hE4J
 mrp+F1U3GBhFvryQrHn1AkEAlDLpBgaxt4kpCeXUr/9lUoKsF/8taOlS3IZjRbBJ
 A3BlaWdHIvUHhqpVbfeCYv7m3GnIs+Kfo1I56haIRVFrNw==
 -----END RSA PRIVATE KEY-----`
+	// EXIN_BOT   = "61103d28-3ac2-44a2-ae34-bd956070dab1"
+	EXIN_BOT   = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
 )
 
 type OrderAction struct {
@@ -67,6 +70,24 @@ func ReadAssetInfo(asset_id string) ( map[string]interface{}, string) {
   return UserInfoMap, UserID2
 }
 
+func GetWalletInfo() ( string, string, string, string, string) {
+  csvFile, err := os.Open("mybitcoin_wallet.csv")
+  if err != nil {
+         log.Fatal(err)
+  }
+  reader := csv.NewReader(bufio.NewReader(csvFile))
+  record, err := reader.Read()
+  if err != nil {
+    log.Fatal(err)
+  }
+  // fmt.Println(record[3])
+  // PrivateKey2           := record[0]
+  // SessionID2      		  := record[2]
+  // UserID2               := record[3]
+  csvFile.Close()
+  return record[0], record[1], record[2], record[3], record[4]
+}
+
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
@@ -83,7 +104,7 @@ func main() {
   scanner   := bufio.NewScanner(os.Stdin)
 	var PromptMsg string
 	PromptMsg  = "1: Create Wallet\n2: Read Bitcoin balance & Address \n3: Read USDT balance & Address\n4: Read EOS balance & address\n"
-	PromptMsg += "5: Read EOS address\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n"
+	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Transfer Bitcoin from bot to new account\n7: Transfer Bitcoin from new account to Master\n"
 	PromptMsg += "8: Withdraw bot's Bitcoin\na: Verify Pin\nd: Create Address and Delete it\nr: Create Address and read it\n"
 	PromptMsg += "q: Exit \nMake your choose:"
 	for  {
@@ -144,6 +165,20 @@ func main() {
     fmt.Println("Balance is: ",
                userInfo["data"].(map[string]interface{})["balance"])
   }
+	if cmd == "5" {
+		packUuid, _ := uuid.FromString(mixin.GetAssetId("USDT"))
+		pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
+		memo := base64.StdEncoding.EncodeToString(pack)
+		// fmt.Println(memo)
+		priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+		bt, err := mixin.Transfer(EXIN_BOT,"0.0001",mixin.GetAssetId("BTC"),memo,
+														 messenger.UuidNewV4().String(),
+														 uPIN,pToken,userID,sID,priKey)
+		if err != nil {
+						log.Fatal(err)
+		}
+		fmt.Println(string(bt))
   }
+	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
