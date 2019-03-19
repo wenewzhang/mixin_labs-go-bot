@@ -10,6 +10,10 @@ import (
     "log"
     "os"
     "bufio"
+		"io/ioutil"
+		"net/http"
+		"bytes"
+		"time"
     mixin "github.com/MooooonStar/mixin-sdk-go/network"
 		"github.com/MooooonStar/mixin-sdk-go/messenger"
 )
@@ -42,6 +46,21 @@ A3BlaWdHIvUHhqpVbfeCYv7m3GnIs+Kfo1I56haIRVFrNw==
 type OrderAction struct {
     A  uuid.UUID  // asset uuid
 }
+
+type Error struct {
+	Status      int    `json:"status"`
+	Code        int    `json:"code"`
+	Description string `json:"description"`
+	trace       string
+}
+
+func (e Error) Error() string {
+	bt, _ := json.Marshal(e)
+	return string(bt)
+}
+
+var httpClient = &http.Client{Timeout: time.Duration(10 * time.Second)}
+
 func ReadAssetInfo(asset_id string) ( map[string]interface{}, string) {
   var UserInfoMap map[string]interface{}
   csvFile, err := os.Open("mybitcoin_wallet.csv")
@@ -88,6 +107,32 @@ func GetWalletInfo() ( string, string, string, string, string) {
   return record[0], record[1], record[2], record[3], record[4]
 }
 
+func GetMarketPrice(asset_id string) ([]byte, error)  {
+	var body []byte
+	req, err := http.NewRequest("GET", "https://exinone.com/exincore/markets?base_asset="+asset_id, bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+  fmt.Println(resp.Body)
+	bt, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		var resp struct {
+			Error Error `json:"error"`
+		}
+		err = json.Unmarshal(bt, &resp)
+		if err == nil {
+			err = resp.Error
+		}
+	}
+	return bt, err
+}
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
@@ -179,6 +224,14 @@ func main() {
 		}
 		fmt.Println(string(bt))
   }
+  if cmd == "6" {
+		priceInfo, err := GetMarketPrice(mixin.GetAssetId("USDT"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(priceInfo[:]))
+	}
+
 	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
