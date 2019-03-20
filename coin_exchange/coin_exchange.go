@@ -135,6 +135,7 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 	}
 	return bt, err
 }
+
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
