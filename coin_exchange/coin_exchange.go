@@ -135,7 +135,6 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 	}
 	return bt, err
 }
-
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
@@ -153,7 +152,7 @@ func main() {
 	var PromptMsg string
 	PromptMsg  = "1: Create Wallet\n2: Read Bitcoin balance & Address \n3: Read USDT balance & Address\n4: Read EOS balance & address\n"
 	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
-	PromptMsg += "8: pay 1 USDT buy BTC\n8: Withdraw bot's Bitcoin\n9: Read Snapshots\nd: Create Address and Delete it\nr: Create Address and read it\n"
+	PromptMsg += "8: pay 1 USDT buy BTC\n9: Read Snapshots\na: Verify bot PIN code\nv: Verify wallet PIN code\n"
 	PromptMsg += "q: Exit \nMake your choose:"
 	for  {
 	 fmt.Print(PromptMsg)
@@ -281,11 +280,27 @@ func main() {
 	}
 	if cmd == "9" {
 		priKey, _, sID, userID, _ := GetWalletInfo()
-		fmt.Println(time.Now().AddDate(0, 0, -1))
-		data, err := mixin.NetworkSnapshots(mixin.GetAssetId("BTC"), time.Now().AddDate(0, 0, -1), false, 10, userID, sID, priKey)
+		data, err := mixin.NetworkSnapshots(mixin.GetAssetId("BTC"), time.Now().AddDate(0, 0, -1), true, 10, userID, sID, priKey)
 		if err != nil { log.Fatal(err) }
 		log.Println(string(data))
 	}
+  if cmd == "a" {
+    QueryInfo, err := mixin.VerifyPIN(PinCode, PinToken,UserId,
+                                      SessionId,PrivateKey)
+    if err != nil {
+            log.Fatal(err)
+    }
+    fmt.Println(string(QueryInfo))
+  }
+  if cmd == "v" {
+    priKey, pinTkn, sID, userID, pinX := GetWalletInfo()
+    QueryInfo, err := mixin.VerifyPIN(pinX, pinTkn,userID,
+                                      sID,priKey)
+    if err != nil {
+            log.Fatal(err)
+    }
+    fmt.Println(string(QueryInfo))
+  }
 	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
