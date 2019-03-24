@@ -1,4 +1,4 @@
-# 通过 Golang 买卖Bitcoin!
+# 通过 Golang 买卖Bitcoin
 
 ## 方案一: 通过ExinCore API进行币币交易
 [Exincore](https://github.com/exinone/exincore) 提供了基于Mixin Network的币币交易API.
