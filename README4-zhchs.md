@@ -121,7 +121,7 @@ fmt.Println(string(bt))
 
 如果你想卖出USDT买入比特币,调用方式如下：
 
-```php
+```go
 packUuid, _ := uuid.FromString(mixin.GetAssetId("BTC"))
 pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
 memo := base64.StdEncoding.EncodeToString(pack)
