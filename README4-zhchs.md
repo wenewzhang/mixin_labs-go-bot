@@ -1,4 +1,4 @@
-# 如何用 Golang 进行Bitcoin交易!
+# 通过 Golang 买卖Bitcoin!
 
 ## 方案一: 通过ExinCore API进行币币交易
 [Exincore](https://github.com/exinone/exincore) 提供了基于Mixin Network的币币交易API.
@@ -24,6 +24,7 @@ ExinCore可以进行BTC, USDT, EOS, ETH 等等交易， 这儿演示如果用 US
 - 再检查一下币的余额，看到帐与否。(比特币的到帐时间是5个区块的高度，约100分钟)。
 
 **请注意，比特币与USDT的地址是一样的。**
+
 ```go
 if cmd == "2" {
   userInfo, userID := ReadAssetInfo("BTC")
@@ -99,9 +100,11 @@ pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
 memo := base64.StdEncoding.EncodeToString(pack)
 // fmt.Println(memo)
 ```
+
 #### 币币交易的完整流程
 转币给ExinCore时，将memo写入你希望购买的币，否则，ExinCore会直接退币给你！
 如果你想卖出比特币买入USDT,调用方式如下：
+
 ```go
 EXIN_BOT        = "61103d28-3ac2-44a2-ae34-bd956070dab1";
 
