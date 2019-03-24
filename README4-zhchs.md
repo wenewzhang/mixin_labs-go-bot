@@ -23,7 +23,7 @@ ExinCore可以进行BTC, USDT, EOS, ETH 等等交易， 这儿演示如果用 US
 - 从第三方交易所或者你的冷钱包中，将币充到上述钱包地址。
 - 再检查一下币的余额，看到帐与否。(比特币的到帐时间是5个区块的高度，约100分钟)。
 
-**请注意，比特币与USDT的地址是一样的。**
+请注意，比特币与USDT的地址是一样的。
 
 ```go
 if cmd == "2" {
@@ -41,9 +41,11 @@ if cmd == "3" {
              userInfo["data"].(map[string]interface{})["balance"])
 }
 ```
+
 #### 查询ExinCore市场的价格信息
 如果来查询ExinCore市场的价格信息呢？你要先了解你交易的基础币是什么，如果你想买比特币，卖出USDT,那么基础货币就是USDT;如果你想买USDT,卖出比特币，那么基础货币就是比特币.
-````go
+
+```go
 if cmd == "6" {
   priceInfo, err := GetMarketPrice(mixin.GetAssetId("USDT"))
   if err != nil {
