@@ -235,7 +235,7 @@ func main() {
 		var marketInfo map[string]interface{}
 		err = json.Unmarshal([]byte(priceInfo), &marketInfo)
     fmt.Println("Asset | price | min | max | exchanges")
-		for _, v := range (marketInfo["data"].(map[string]interface{})) {
+		for _, v := range (marketInfo["data"].([]interface{})) {
 			fmt.Println(v.(map[string]interface{})["exchange_asset_symbol"],"/",
 									v.(map[string]interface{})["base_asset_symbol"],
 									v.(map[string]interface{})["price"],
@@ -254,7 +254,7 @@ func main() {
 		var marketInfo map[string]interface{}
 		err = json.Unmarshal([]byte(priceInfo), &marketInfo)
     fmt.Println("Asset | price | min | max | exchanges")
-		for _, v := range (marketInfo["data"].(map[string]interface{})) {
+		for _, v := range (marketInfo["data"].([]interface{})) {
 			fmt.Println(v.(map[string]interface{})["exchange_asset_symbol"],"/",
 									v.(map[string]interface{})["base_asset_symbol"],
 									v.(map[string]interface{})["price"],
@@ -280,7 +280,7 @@ func main() {
 	}
 	if cmd == "9" {
 		priKey, _, sID, userID, _ := GetWalletInfo()
-		data, err := mixin.NetworkSnapshots(mixin.GetAssetId("BTC"), time.Now().AddDate(0, 0, -1), true, 10, userID, sID, priKey)
+		data, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 10, userID, sID, priKey)
 		if err != nil { log.Fatal(err) }
 		log.Println(string(data))
 	}
