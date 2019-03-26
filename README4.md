@@ -122,7 +122,43 @@ fmt.Println(string(bt))
 The ExinCore should transfer the target coin to your bot, meanwhile, put the fee, order id, price etc. information in the memo, unpack the data like below.
 - **readUserSnapshots** Read snapshots of the user.
 ```go
-
+type OrderResponse struct {
+    C  int    // code
+    P  string     // price, only type is return
+    F  string     // ExinCore fee, only type is return
+    FA []byte     // ExinCore fee asset, only type is return
+    T  string     // type: refund(F)|return(R)|Error(E)
+    O  uuid.UUID  // order: trace_id
+}
+priKey, _, sID, userID, _ := GetWalletInfo()
+snapData, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 3, userID, sID, priKey)
+if err != nil { log.Fatal(err) }
+fmt.Println(string(snapData))
+// fmt.Println(snapData.data)
+var snapInfo map[string]interface{}
+err = json.Unmarshal([]byte(snapData), &snapInfo)
+if err != nil {
+    log.Fatal(err)
+}
+for _, v := range (snapInfo["data"].([]interface{})) {
+  val := v.(map[string]interface{})["amount"]
+  if amount, ok := val.(string); ok {
+      if v.(map[string]interface{})["data"] != nil {
+        strMemo := v.(map[string]interface{})["data"]
+        memo := strMemo.(string)
+        parsedpack, _ := base64.StdEncoding.DecodeString(memo)
+        orderAction := OrderResponse{}
+        _ = msgpack.Unmarshal(parsedpack, &orderAction)
+        if orderAction.C == 1000 {
+          fmt.Println("---------------Successful----Exchange-------------")
+          fmt.Println("You got ",amount)
+          uuidAsset,_:= uuid.FromBytes(orderAction.FA)
+          fmt.Println(uuidAsset," price:",orderAction.P," Fee:",orderAction.F)
+        }
+      }
+  } else {
+      continue
+  }
 ```
 
 If you coin exchange successful, console output like below:
