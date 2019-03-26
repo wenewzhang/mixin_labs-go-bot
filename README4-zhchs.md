@@ -186,13 +186,9 @@ for _, v := range (snapInfo["data"].([]interface{})) {
 
 一次成功的交易如下：
 ```bash
-------------MEMO:-coin--exchange--------------
-memo: hqFDzQPooVCnMzg3Mi45N6FGqTAuMDAwNzc0NqJGQcQQgVsLGidkNzaPqkLWlPpiCqFUoUahT8QQIbfeL6p5RVOcEP0mLb+t+g==
-You Get Coins: 815b0b1a-2764-3736-8faa-42d694fa620a 0.3857508
-Successful Exchange:
-Fee asset ID: 815b0b1a-2764-3736-8faa-42d694fa620a fee is :0.0007746
-Order ID: 21b7de2f-aa79-4553-9c10-fd262dbfadfa Price is :3872.97
---------------memo-record end---------------
+---------------Successful----Exchange-------------
+You got  0.3981012
+815b0b1a-2764-3736-8faa-42d694fa620a  price: 3996.8  Fee: 0.0007994
 ```
 
 #### 读取币的余额
