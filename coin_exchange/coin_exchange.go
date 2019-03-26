@@ -221,7 +221,7 @@ func main() {
 		memo := base64.StdEncoding.EncodeToString(pack)
 		// fmt.Println(memo)
 		priKey, pToken, sID, userID, uPIN := GetWalletInfo()
-		bt, err := mixin.Transfer("98181edc-0ed4-3eb8-a62c-1398677935e7","0.0001",mixin.GetAssetId("BTC"),memo,
+		bt, err := mixin.Transfer(EXIN_BOT,"0.0001",mixin.GetAssetId("BTC"),memo,
 														 messenger.UuidNewV4().String(),
 														 uPIN,pToken,userID,sID,priKey)
 		if err != nil {
