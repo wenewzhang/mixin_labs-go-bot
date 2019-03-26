@@ -54,11 +54,14 @@ type Error struct {
 	trace       string
 }
 
-// type respData struct {
-// 	Zero      string `json:"0"`
-// 	One string `json:"1"`
-// 	Two       string `json:"2"`
-// }
+type OrderResponse struct {
+    C  int    // code
+    P  string     // price, only type is return
+    F  string     // ExinCore fee, only type is return
+    FA []byte     // ExinCore fee asset, only type is return
+    T  string     // type: refund(F)|return(R)|Error(E)
+    O  uuid.UUID  // order: trace_id
+}
 
 func (e Error) Error() string {
 	bt, _ := json.Marshal(e)
@@ -218,7 +221,7 @@ func main() {
 		memo := base64.StdEncoding.EncodeToString(pack)
 		// fmt.Println(memo)
 		priKey, pToken, sID, userID, uPIN := GetWalletInfo()
-		bt, err := mixin.Transfer(EXIN_BOT,"0.0001",mixin.GetAssetId("BTC"),memo,
+		bt, err := mixin.Transfer("98181edc-0ed4-3eb8-a62c-1398677935e7","0.0001",mixin.GetAssetId("BTC"),memo,
 														 messenger.UuidNewV4().String(),
 														 uPIN,pToken,userID,sID,priKey)
 		if err != nil {
@@ -280,9 +283,35 @@ func main() {
 	}
 	if cmd == "9" {
 		priKey, _, sID, userID, _ := GetWalletInfo()
-		data, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 10, userID, sID, priKey)
+		snapData, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 3, userID, sID, priKey)
 		if err != nil { log.Fatal(err) }
-		log.Println(string(data))
+		fmt.Println(string(snapData))
+    // fmt.Println(snapData.data)
+    var snapInfo map[string]interface{}
+    err = json.Unmarshal([]byte(snapData), &snapInfo)
+    if err != nil {
+        log.Fatal(err)
+    }
+    for _, v := range (snapInfo["data"].([]interface{})) {
+      val := v.(map[string]interface{})["amount"]
+      if amount, ok := val.(string); ok {
+          if v.(map[string]interface{})["data"] != nil {
+            strMemo := v.(map[string]interface{})["data"]
+            memo := strMemo.(string)
+            parsedpack, _ := base64.StdEncoding.DecodeString(memo)
+            orderAction := OrderResponse{}
+            _ = msgpack.Unmarshal(parsedpack, &orderAction)
+            if orderAction.C == 1000 {
+              fmt.Println("---------------Successful----Exchange-------------")
+              fmt.Println("You got ",amount)
+              uuidAsset,_:= uuid.FromBytes(orderAction.FA)
+              fmt.Println(uuidAsset," price:",orderAction.P," Fee:",orderAction.F)
+            }
+          }
+      } else {
+          continue
+      }
+    }
 	}
   if cmd == "a" {
     QueryInfo, err := mixin.VerifyPIN(PinCode, PinToken,UserId,
