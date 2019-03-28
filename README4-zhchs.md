@@ -154,7 +154,12 @@ type OrderResponse struct {
     O  uuid.UUID  // order: trace_id
 }
 priKey, _, sID, userID, _ := GetWalletInfo()
-snapData, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 3, userID, sID, priKey)
+fmt.Println("Input the trade time:")
+var tmUTC string
+scanner.Scan()
+tmUTC = scanner.Text()
+tm, _:= time.Parse(time.RFC3339Nano,tmUTC)
+snapData, err := mixin.NetworkSnapshots("", tm, true, 3, userID, sID, priKey)
 if err != nil { log.Fatal(err) }
 fmt.Println(string(snapData))
 // fmt.Println(snapData.data)
