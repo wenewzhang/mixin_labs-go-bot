@@ -283,7 +283,8 @@ func main() {
 	}
 	if cmd == "9" {
 		priKey, _, sID, userID, _ := GetWalletInfo()
-		snapData, err := mixin.NetworkUserSnapshots("", "2019-03-25T02:04:26.69425Z", true, 3, userID, sID, priKey)
+    tm, _:= time.Parse(time.RFC3339Nano,"2019-03-25T02:04:26.69425Z")
+		snapData, err := mixin.NetworkSnapshots("", tm, true, 3, userID, sID, priKey)
 		if err != nil { log.Fatal(err) }
 		fmt.Println(string(snapData))
     // fmt.Println(snapData.data)
