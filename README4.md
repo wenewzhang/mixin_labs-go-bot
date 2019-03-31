@@ -8,7 +8,7 @@ You pay USDT to ExinCore, ExinCore transfer Bitcoin to you on the fly with very 
 ExinCore don't know who you are because ExinCore only know your client's uuid.
 
 ### Pre-request:
-You should  have created a bot based on Mixin Network. Create one by reading [PHP Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-php-bot).
+You should  have created a bot based on Mixin Network. Create one by reading [GO Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-go-bot).
 
 #### Install required packages
 As you know, we introduce you the **mixin-sdk-go** in [chapter 1](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md), assume it has installed before, let's install **uuid, msgpack** here.
@@ -94,7 +94,7 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 ```
 
 #### Create a memo to prepare order
-The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2.md) introduce transfer coins. But you need to let ExinCore know which coin you want to buy. Just write your target asset into memo.
+The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md) introduce transfer coins. But you need to let ExinCore know which coin you want to buy. Just write your target asset into memo.
 ```go
 packUuid, _ := uuid.FromString(mixin.GetAssetId("BTC"))
 pack, _ := msgpack.Marshal(OrderAction{A: packUuid})

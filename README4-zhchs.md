@@ -9,7 +9,7 @@
 ExinCore 也不知道你是谁，它只知道你的UUID.
 
 ### 预备知识:
-你先需要创建一个机器人, 方法在 [教程一](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README-zhchs.md).
+你先需要创建一个机器人, 方法在 [教程一](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README-zhchs.md).
 
 #### 安装依赖包
 正如教程一里我们介绍过的， 我们需要依赖 **mixin-sdk-go**, 你应该先安装过它了， 这儿我们再安装 **uuid, msgpack** 两个软件包.
@@ -96,7 +96,7 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 ```
 
 #### 交易前，创建一个Memo!
-在第二章里,[基于Mixin Network的PHP比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-php-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
+在第二章里,[基于Mixin Network的GO比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2-zhchs.md), 我们学习过退还用户比特币，在这里，我们除了给ExinCore支付币外，还要告诉他我们想购买的币是什么，即将想购买的币存到memo里。
 ```go
 packUuid, _ := uuid.FromString(mixin.GetAssetId("BTC"))
 pack, _ := msgpack.Marshal(OrderAction{A: packUuid})
