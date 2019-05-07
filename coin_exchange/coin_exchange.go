@@ -20,24 +20,24 @@ import (
 
 const (
 	UserId     = "21042518-85c7-4903-bb19-f311813d1f51"
-	PinCode    = "540806"
-	SessionId  = "806a2ea0-e1e0-409f-beac-d6410af7bf93"
-	PinToken   = "N3HqYZzHQ67/bMXjm8M9NotKsxWabSWEy1mYICFiaFPUQaRkWa+AiUQsEoKoeRtnbH4sy912vn9/RII//yO9GF94MAACWSShUubbADOmJjGKvgxBRSMHi9h7I4jCh1LQhkUq7iUKVY5GBGCWp83ZbcyvEGWlBnvOcqb010jhMpE="
+	PinCode    = "152997"
+	SessionId  = "f8c55131-f78a-4858-9ec1-7c69d2a88d0d"
+	PinToken   = "aUO0NSHchcqGony2gSDJqW2ohStqF47nJlAeAo6dFgXSD0cg/RaJtKT6fRjN63q7wZGNYwOOTzPIq6WypnrZ1AR0spYE8dZ6thWAooIM2alVwGtjofczVdvPeOegCCbDgcIGTTxTKgAPij10AHaI2RX1Is4gB3zzArF5c8l54no="
 	//please delele the blank of PrivateKey the before each line
 	PrivateKey = `-----BEGIN RSA PRIVATE KEY-----
-MIICXgIBAAKBgQCOJB1fIMpyPCh4pPM0cZMhYfDAA2IwgYrjwYFT0EGlkjJW8TK5
-BIIQXvE83VHUSmuVFPOgpOyycbLvxwfau2TP6FTLLN7WEgyVyA4CzpiQ0ihPHXjQ
-TtUJKnJ7Uj3dabG+0BnkvksKSpnhXv+lBCEd7Y8P+f2IcXAURECSbKIrdwIDAQAB
-AoGBAIFo6gDY5tgYYzRr4SznFnA3LixzKCtHVb9ERs2a9pmawBAd6vM94nirJ/El
-AsJHuyjw+VpRrVpNX/8j8se3AvFUPF4Q67sMOAob3dsOHy3SKIysOKwRzLuYF69m
-rweJPSXJuqFWc6pHuXHArW/eL5ZlWbh1dKdU+2EYEAy/kcjpAkEA2zW8qt6zv5D5
-IjvCIz3mtincdng9DuZE5SzsP7fxRkEMVqP4QLrRnfwuHYuZj9KjuEFX85M2iKot
-cv8KHI0ovQJBAKX/JadZmoL4HJKz/OfXH3lU6zy787gY0xYcDPh4MSMDNVSOcqhe
-lOnintQD5vPaGZUl6aBkO5Dmp6JIgELfqkMCQQDRdbGHnDEpVT+ZJHzG6/kuCyXr
-1cySFhmy2pAL+pmDRdiiWR93yotNaJAwDxp2wRFLmLSPvBUZ1XKENYrV6VQJAkBV
-adY8KDUDExvQuOB3gw/k5LcuRx//KHblN4XNDDtsYqg8XBfPXuuM9Vj4ixF5hE4J
-mrp+F1U3GBhFvryQrHn1AkEAlDLpBgaxt4kpCeXUr/9lUoKsF/8taOlS3IZjRbBJ
-A3BlaWdHIvUHhqpVbfeCYv7m3GnIs+Kfo1I56haIRVFrNw==
+MIICXQIBAAKBgQDFOoiKwycPZCtM/kjBbuNbT3lP2eKfV4lTHKRj2UEfvs7RMRhk
+7hzY0bxhLPP6ZI64RI6EAobRUUiK8MB4pqKzO0AukUUCwizrIN0LsWvH+qZXIujf
+JAGsdh95UQBk5cJWG68xg1EdijDNDEoa+DXoDnWdNjQJSRBVx2D32UHHTQIDAQAB
+AoGAfp5Xbo5fEziBvAo790MTX1mkTilZnmZ6WQs4Vonxj0nWSOK2AIYFqwTrZY+Q
+ip3oKlCJFiLxHoyKf/iT+GEybbEBEwTwum+I/NQA+dQixLxoBP5jnSrt9HoPxJ2h
+sheoBfI/OT1+0QqDlqVlnJeNREkmLHXqdU2r2V5RXBeg0FkCQQD0aYqXCBfb4mln
+Kt9xx8o+yZobzGqgti5IW8Nw+OONGMlkTt+eXiQp43oPH9PmznbNEhnWAXIIG+Hi
+PrHb1BbjAkEAzpRRs9qSPABF/mQx1u9AVwmGKtLVzQ6HldhChCzwWzFYqu6wReMm
+r4Gn+LKSJNOjZsgII7AFlu8tXMBGDpTQDwJBAIvTWXMgMS4dcHmSIHTifMTA50Zi
+Atpgf0fsH3qhGOVeudCGAw6CAyRnvCus5LiVg4e8hEVXXFphQTAC+BOwWUsCQQC/
+7NzblD44sKhW6Q/E+RN1yct1DdzFXrJpbTqfQoEsuHQAmzH6PEg81uEQFhfhTx+I
+5l9piKgoyp4ChkCQW4HRAkB8bQ/UkC9iny345GoCoy/Pf6oSfSttokFP7Z9vaERH
+FaFESfvfy05ogzB5hN3LoywwSLymrHgeQQK2RYunSpAS
 -----END RSA PRIVATE KEY-----`
 	EXIN_BOT   = "61103d28-3ac2-44a2-ae34-bd956070dab1"
 	// EXIN_BOT   = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
@@ -52,6 +52,12 @@ type Error struct {
 	Code        int    `json:"code"`
 	Description string `json:"description"`
 	trace       string
+}
+type OceanOrderAction struct {
+  S string    // side
+  A uuid.UUID // asset
+  P string    // price
+  T string    // type
 }
 
 type OrderResponse struct {
@@ -141,7 +147,9 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
+  fmt.Println(packUuid)
   pack, _ := msgpack.Marshal(OrderAction{A: packUuid,})
+  fmt.Println(pack)
   memo := base64.StdEncoding.EncodeToString(pack)
   // gaFBxBDG0McoJiRCm44N2dGbZZL6
   fmt.Println(memo)
@@ -150,6 +158,15 @@ func main() {
   orderAction := OrderAction{}
   _ = msgpack.Unmarshal(parsedpack, &orderAction)
   fmt.Println(orderAction.A)
+  memoOcean,_ :=
+    msgpack.Marshal(OceanOrderAction{
+      T: "L",
+      P: "0.1",
+      S: "A",
+      A: packUuid,
+    })
+  memoOceanB64 := base64.StdEncoding.EncodeToString(memoOcean)
+  fmt.Println(memoOceanB64)
 
   scanner   := bufio.NewScanner(os.Stdin)
 	var PromptMsg string
