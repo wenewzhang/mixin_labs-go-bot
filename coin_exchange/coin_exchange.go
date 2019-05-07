@@ -171,8 +171,15 @@ func main() {
   scanner   := bufio.NewScanner(os.Stdin)
 	var PromptMsg string
 	PromptMsg  = "1: Create Wallet\n2: Read Bitcoin balance & Address \n3: Read USDT balance & Address\n4: Read EOS balance & address\n"
-	PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
+  PromptMsg += "tbb:Transfer BTC from Bot to Wallet\ntbm:Transfer BTC from Wallet to Master\n"
+  PromptMsg += "teb:Transfer EOS from Bot to Wallet\ntem:Transfer EOS from Wallet to Master\n"
+  PromptMsg += "tub:Transfer USDT from Bot to Wallet\ntum:Transfer USDT from Wallet to Master\n"
+  PromptMsg += "tcb:Transfer CNB from Bot to Wallet\ntcm:Transfer CNB from Wallet to Master\n"
+  PromptMsg += "txb:Transfer XIN from Bot to Wallet\ntxm:Transfer XIN from Wallet to Master\n"
+  PromptMsg += "trb:Transfer ERC20 from Bot to Wallet\ntrm:Transfer ERC20 from Wallet to Master\n"
+  PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
 	PromptMsg += "8: pay 1 USDT buy BTC\n9: Read Snapshots\na: Verify bot PIN code\nv: Verify wallet PIN code\n"
+  PromptMsg += "ab: Read Bot Assets\naw: Read Wallet Assets\n";
 	PromptMsg += "q: Exit \nMake your choose:"
 	for  {
 	 fmt.Print(PromptMsg)
@@ -226,6 +233,7 @@ func main() {
   }
   if cmd == "4" {
     userInfo, userID := ReadAssetInfo("EOS")
+    fmt.Println(userInfo["data"])
     fmt.Println("User ID ",userID, "'s EOS Address is: ",
                userInfo["data"].(map[string]interface{})["account_name"],
                userInfo["data"].(map[string]interface{})["account_tag"])
@@ -342,6 +350,68 @@ func main() {
             log.Fatal(err)
     }
     fmt.Println(string(QueryInfo))
+  }
+  if cmd == "aw" {
+    priKey, _, sID, userID, _ := GetWalletInfo()
+    assets, err := mixin.ReadAssets(userID,sID,priKey)
+    if err != nil {
+        log.Fatal(err)
+    }
+    var AssetsInfo map[string]interface{}
+    err = json.Unmarshal(assets, &AssetsInfo)
+    if err != nil {
+        log.Fatal(err)
+    }
+    // fmt.Println("Data is: ",AssetsInfo["data"].(map[string]interface{})["public_key"])
+    for _, v := range (AssetsInfo["data"].([]interface{})) {
+      if v.(map[string]interface{})["symbol"] == "EOS" {
+        fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["account_name"]," ",
+                    v.(map[string]interface{})["account_tag"]," ",
+                    v.(map[string]interface{})["balance"])
+      } else {
+        fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["public_key"]," ",
+                    v.(map[string]interface{})["balance"])
+      }
+    }
+  }
+  if cmd == "ab" {
+    // priKey, _, sID, userID, _ := GetWalletInfo()
+    assets, err := mixin.ReadAssets(UserId,SessionId,PrivateKey)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(string(assets))
+    var AssetsInfo map[string]interface{}
+    err = json.Unmarshal(assets, &AssetsInfo)
+    if err != nil {
+        log.Fatal(err)
+    }
+    // fmt.Println("Data is: ",AssetsInfo["data"].(map[string]interface{})["public_key"])
+    for _, v := range (AssetsInfo["data"].([]interface{})) {
+      if v.(map[string]interface{})["symbol"] == "EOS" {
+        fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["account_name"]," ",
+                    v.(map[string]interface{})["account_tag"]," ",
+                    v.(map[string]interface{})["balance"])
+      } else {
+        fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["public_key"]," ",
+                    v.(map[string]interface{})["balance"])
+      }
+    }
+  }
+
+  if cmd == "tcb" {
+    _, _, _, userID, _ := GetWalletInfo()
+    bt, err := mixin.Transfer(userID,"1",mixin.GetAssetId("CNB"),"memo",
+                             messenger.UuidNewV4().String(),
+                             PinCode,PinToken,UserId,SessionId,PrivateKey)
+    if err != nil {
+         log.Fatal(err)
+    }
+    fmt.Println(string(bt))
   }
   if cmd == "v" {
     priKey, pinTkn, sID, userID, pinX := GetWalletInfo()
