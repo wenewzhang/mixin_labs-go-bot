@@ -14,6 +14,7 @@ import (
 		"net/http"
 		"bytes"
 		"time"
+    "strconv"
     mixin "github.com/MooooonStar/mixin-sdk-go/network"
 		"github.com/MooooonStar/mixin-sdk-go/messenger"
 )
@@ -39,8 +40,10 @@ Atpgf0fsH3qhGOVeudCGAw6CAyRnvCus5LiVg4e8hEVXXFphQTAC+BOwWUsCQQC/
 5l9piKgoyp4ChkCQW4HRAkB8bQ/UkC9iny345GoCoy/Pf6oSfSttokFP7Z9vaERH
 FaFESfvfy05ogzB5hN3LoywwSLymrHgeQQK2RYunSpAS
 -----END RSA PRIVATE KEY-----`
-	EXIN_BOT   = "61103d28-3ac2-44a2-ae34-bd956070dab1"
-	// EXIN_BOT   = "0b4f49dc-8fb4-4539-9a89-fb3afc613747"
+	EXIN_BOT                = "61103d28-3ac2-44a2-ae34-bd956070dab1"
+  OCEANONE_BOT            = "aaff5bef-42fb-4c9f-90e0-29f69176b7d4";
+  MASTER_UUID             = "0b4f49dc-8fb4-4539-9a89-fb3afc613747";
+  ERC20_BENZ              = "2b9c216c-ef60-398d-a42a-eba1b298581d";
 )
 
 type OrderAction struct {
@@ -104,6 +107,18 @@ func ReadAssetInfo(asset_id string) ( map[string]interface{}, string) {
   return UserInfoMap, UserID2
 }
 
+func ReadAssetBalance(asset_id, UserID, SessionID, PrivateKey string) (string) {
+  var AssetInfo map[string]interface{}
+  AssetInfoBytes, err  := mixin.ReadAsset(mixin.GetAssetId(asset_id),
+                                         UserID,SessionID,PrivateKey)
+  if err != nil { log.Fatal(err) }
+  // fmt.Println(string(AssetInfoBytes))
+  if err := json.Unmarshal(AssetInfoBytes, &AssetInfo); err != nil {
+      log.Fatal(err)
+  }
+  return AssetInfo["data"].(map[string]interface{})["balance"].(string)
+}
+
 func GetWalletInfo() ( string, string, string, string, string) {
   csvFile, err := os.Open("mybitcoin_wallet.csv")
   if err != nil {
@@ -144,6 +159,19 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 	}
 	return bt, err
 }
+
+func transferBotWallet(AssetID,opponentID,PinCode,PinToken,UserId,SessionId,PrivateKey string) {
+  balance := ReadAssetBalance(AssetID,UserId,SessionId,PrivateKey)
+  fmt.Println(balance)
+  ibalance, _ := strconv.ParseFloat(balance,64)
+  if ibalance > 0 {
+    transInfo, _ := mixin.Transfer(opponentID,balance,mixin.GetAssetId(AssetID),"memo",
+                             messenger.UuidNewV4().String(),
+                             PinCode,PinToken,UserId,SessionId,PrivateKey)
+    fmt.Println(string(transInfo))
+  }
+}
+
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
@@ -405,13 +433,43 @@ func main() {
 
   if cmd == "tcb" {
     _, _, _, userID, _ := GetWalletInfo()
-    bt, err := mixin.Transfer(userID,"1",mixin.GetAssetId("CNB"),"memo",
-                             messenger.UuidNewV4().String(),
-                             PinCode,PinToken,UserId,SessionId,PrivateKey)
-    if err != nil {
-         log.Fatal(err)
-    }
-    fmt.Println(string(bt))
+    transferBotWallet("CNB",userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "tcm" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWallet("CNB",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
+  }
+  if cmd == "tub" {
+    _, _, _, userID, _ := GetWalletInfo()
+    transferBotWallet("USDT",userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "tum" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWallet("USDT",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
+  }
+  if cmd == "txb" {
+    _, _, _, userID, _ := GetWalletInfo()
+    transferBotWallet("XIN",userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "txm" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWallet("XIN",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
+  }
+  if cmd == "tbb" {
+    _, _, _, userID, _ := GetWalletInfo()
+    transferBotWallet("BTC",userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "tbm" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWallet("BTC",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
+  }
+  if cmd == "teb" {
+    _, _, _, userID, _ := GetWalletInfo()
+    transferBotWallet("EOS",userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "tem" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWallet("EOS",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
   }
   if cmd == "v" {
     priKey, pinTkn, sID, userID, pinX := GetWalletInfo()
