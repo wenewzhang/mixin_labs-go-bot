@@ -62,7 +62,9 @@ type OceanOrderAction struct {
   P string    // price
   T string    // type
 }
-
+type OceanOrderCancel struct {
+  O uuid.UUID // asset
+}
 type OrderResponse struct {
     C  int    // code
     P  string     // price, only type is return
@@ -657,7 +659,31 @@ func main() {
        }
      }//end of b1
      if cmd == "c" {
-       
+       fmt.Print("Please input the Order id: ")
+       var ocmd string
+       scanner.Scan()
+       ocmd = scanner.Text()
+       fmt.Println(ocmd)
+       memoOcean,_ :=
+         msgpack.Marshal(OceanOrderCancel{
+           O: packUuid,
+         })
+       omemoCancel := base64.StdEncoding.EncodeToString(memoOcean)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("CNB",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       // abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= 0.0000001 {
+         fmt.Println(omemoCancel)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        "0.00000001",
+                                        mixin.GetAssetId("CNB"),
+                                        omemoCancel,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+       } else { fmt.Println("Not enough CNB!") }
      }
     }
    }//end of Ocean.one exchange
