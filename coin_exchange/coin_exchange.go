@@ -589,6 +589,7 @@ func main() {
     var PromptMsg string
     PromptMsg  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n"
     PromptMsg += "2:  Fetch ERC20(Benz)/USDT orders\ns2: Sell Benz/USDT\nb2: Buy Benz/USDT\n"
+    PromptMsg += "3:  Fetch BTC/USDT orders\ns3: Sell BTC/USDT\nb3: Buy BTC/USDT\n"
     PromptMsg += "c: Cancel Order\nq:  Exit\n"
     for  {
      fmt.Print(PromptMsg)
@@ -602,6 +603,9 @@ func main() {
      if cmd == "2" {
         FormatOceanOneMarketPrice(ERC20_BENZ,mixin.GetAssetId("USDT"))
       }
+      if cmd == "3" {
+         FormatOceanOneMarketPrice(mixin.GetAssetId("BTC"),mixin.GetAssetId("USDT"))
+       }
      if cmd == "s1" {
        fmt.Print("Please input the price of XIN/USDT: ")
        var pcmd string
@@ -628,6 +632,13 @@ func main() {
                                         messenger.UuidNewV4().String(),
                                         uPIN,pToken,userID,sID,priKey)
          fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
        } else { fmt.Println("Not enough XIN!") }
      }
      if cmd == "b1" {
@@ -656,6 +667,153 @@ func main() {
                                         messenger.UuidNewV4().String(),
                                         uPIN,pToken,userID,sID,priKey)
          fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
+       } else { fmt.Println("Not enough USDT!") }
+     }//end of b1
+     if cmd == "s2" {
+       fmt.Print("Please input the price of ERC20/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of ERC20: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(mixin.GetAssetId("USDT"),"A",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalanceByUUID(ERC20_BENZ,userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        ERC20_BENZ,
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
+       } else { fmt.Println("Not enough BenZ!") }
+     }
+     if cmd == "b2" {
+       fmt.Print("Please input the price of ERC20/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of USDT: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(ERC20_BENZ,"B",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("USDT",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        mixin.GetAssetId("USDT"),
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
+       } else { fmt.Println("Not enough USDT!") }
+     }//end of b2
+     if cmd == "s3" {
+       fmt.Print("Please input the price of BTC/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of BTC: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(mixin.GetAssetId("USDT"),"A",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("BTC",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        mixin.GetAssetId("BTC"),
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
+       } else { fmt.Println("Not enough BTC!") }
+     }
+     if cmd == "b3" {
+       fmt.Print("Please input the price of BTC/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of USDT: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(mixin.GetAssetId("BTC"),"B",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("USDT",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        mixin.GetAssetId("USDT"),
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+         var jsTransInfo map[string]interface{}
+         err := json.Unmarshal([]byte(transInfo), &jsTransInfo)
+         if err != nil {
+             log.Fatal(err)
+         }
+         fmt.Println("The Order id is " + jsTransInfo["data"].(map[string]interface{})["trace_id"].(string) +
+                    " it is needed to cancel the order!")
        } else { fmt.Println("Not enough USDT!") }
      }//end of b1
      if cmd == "c" {
