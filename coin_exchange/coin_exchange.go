@@ -172,6 +172,64 @@ func GetMarketPrice(asset_id string) ([]byte, error)  {
 	return bt, err
 }
 
+func FormatOceanOneMarketPrice(asset_id string, base_asset string) {
+  priceInfo, err := GetOceanOneMarketPrice(asset_id, base_asset)
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  var marketInfo map[string]interface{}
+  err = json.Unmarshal([]byte(priceInfo), &marketInfo)
+   fmt.Println("Price | Amount | Funds | Side")
+  for _, v := range (marketInfo["data"].
+                    (map[string]interface{})["data"].
+                    (map[string]interface{})["asks"].
+                    ([]interface{})) {
+    fmt.Println(v.(map[string]interface{})["price"],
+                v.(map[string]interface{})["amount"],
+                v.(map[string]interface{})["funds"],
+                v.(map[string]interface{})["side"],
+               )
+  }
+  for _, v := range (marketInfo["data"].
+                    (map[string]interface{})["data"].
+                    (map[string]interface{})["bids"].
+                    ([]interface{})) {
+    fmt.Println(v.(map[string]interface{})["price"],
+                v.(map[string]interface{})["amount"],
+                v.(map[string]interface{})["funds"],
+                v.(map[string]interface{})["side"],
+               )
+  }
+}
+func GetOceanOneMarketPrice(asset_id string, base_asset string) ([]byte, error)  {
+	var body []byte
+	req, err := http.NewRequest("GET", "https://events.ocean.one/markets/" + asset_id + "-" + base_asset + "/book",
+                              bytes.NewReader(body))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+  // fmt.Println(resp.Body)
+	bt, err := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		var resp struct {
+			Error Error `json:"error"`
+		}
+		err = json.Unmarshal(bt, &resp)
+		if err == nil {
+			err = resp.Error
+		}
+	}
+	return bt, err
+}
+
 func transferBotWallet(AssetID,opponentID,PinCode,PinToken,UserId,SessionId,PrivateKey string) {
   balance := ReadAssetBalance(AssetID,UserId,SessionId,PrivateKey)
   fmt.Println(balance)
@@ -524,9 +582,14 @@ func main() {
      scanner.Scan()
      cmd = scanner.Text()
      if cmd == "q" { break }
-
+     if cmd == "1" {
+     		FormatOceanOneMarketPrice(mixin.GetAssetId("XIN"),mixin.GetAssetId("USDT"))
+     	}
+     if cmd == "2" {
+         FormatOceanOneMarketPrice(ERC20_BENZ,mixin.GetAssetId("USDT"))
+      }
+    }
    }
   }
-	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
