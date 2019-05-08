@@ -119,6 +119,18 @@ func ReadAssetBalance(asset_id, UserID, SessionID, PrivateKey string) (string) {
   return AssetInfo["data"].(map[string]interface{})["balance"].(string)
 }
 
+func ReadAssetBalanceByUUID(asset_uuid, UserID, SessionID, PrivateKey string) (string) {
+  var AssetInfo map[string]interface{}
+  AssetInfoBytes, err  := mixin.ReadAsset(asset_uuid,
+                                         UserID,SessionID,PrivateKey)
+  if err != nil { log.Fatal(err) }
+  // fmt.Println(string(AssetInfoBytes))
+  if err := json.Unmarshal(AssetInfoBytes, &AssetInfo); err != nil {
+      log.Fatal(err)
+  }
+  return AssetInfo["data"].(map[string]interface{})["balance"].(string)
+}
+
 func GetWalletInfo() ( string, string, string, string, string) {
   csvFile, err := os.Open("mybitcoin_wallet.csv")
   if err != nil {
@@ -166,6 +178,18 @@ func transferBotWallet(AssetID,opponentID,PinCode,PinToken,UserId,SessionId,Priv
   ibalance, _ := strconv.ParseFloat(balance,64)
   if ibalance > 0 {
     transInfo, _ := mixin.Transfer(opponentID,balance,mixin.GetAssetId(AssetID),"memo",
+                             messenger.UuidNewV4().String(),
+                             PinCode,PinToken,UserId,SessionId,PrivateKey)
+    fmt.Println(string(transInfo))
+  }
+}
+
+func transferBotWalletByUUID(AssetUUID,opponentID,PinCode,PinToken,UserId,SessionId,PrivateKey string) {
+  balance := ReadAssetBalanceByUUID(AssetUUID,UserId,SessionId,PrivateKey)
+  fmt.Println(balance)
+  ibalance, _ := strconv.ParseFloat(balance,64)
+  if ibalance > 0 {
+    transInfo, _ := mixin.Transfer(opponentID,balance,AssetUUID,"memo",
                              messenger.UuidNewV4().String(),
                              PinCode,PinToken,UserId,SessionId,PrivateKey)
     fmt.Println(string(transInfo))
@@ -470,6 +494,14 @@ func main() {
   if cmd == "tem" {
     priKey, pToken, sID, userID, uPIN := GetWalletInfo()
     transferBotWallet("EOS",MASTER_UUID,uPIN,pToken,userID,sID,priKey)
+  }
+  if cmd == "trb" {
+    _, _, _, userID, _ := GetWalletInfo()
+    transferBotWalletByUUID(ERC20_BENZ,userID,PinCode,PinToken,UserId,SessionId,PrivateKey)
+  }
+  if cmd == "trm" {
+    priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+    transferBotWalletByUUID(ERC20_BENZ,MASTER_UUID,uPIN,pToken,userID,sID,priKey)
   }
   if cmd == "v" {
     priKey, pinTkn, sID, userID, pinX := GetWalletInfo()
