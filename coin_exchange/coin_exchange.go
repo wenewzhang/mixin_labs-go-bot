@@ -254,6 +254,18 @@ func transferBotWalletByUUID(AssetUUID,opponentID,PinCode,PinToken,UserId,Sessio
   }
 }
 
+func generateOceanOrderMemo(TargetAsset, Side, Price string) (string) {
+  packUuid, _ := uuid.FromString(TargetAsset)
+  memoOcean,_ :=
+    msgpack.Marshal(OceanOrderAction{
+      T: "L",
+      P: Price,
+      S: Side,
+      A: packUuid,
+    })
+  return  base64.StdEncoding.EncodeToString(memoOcean)
+}
+
 func main() {
   // Pack memo
   packUuid, _ := uuid.FromString("c6d0c728-2624-429b-8e0d-d9d19b6592fa")
@@ -586,8 +598,29 @@ func main() {
      		FormatOceanOneMarketPrice(mixin.GetAssetId("XIN"),mixin.GetAssetId("USDT"))
      	}
      if cmd == "2" {
-         FormatOceanOneMarketPrice(ERC20_BENZ,mixin.GetAssetId("USDT"))
+        FormatOceanOneMarketPrice(ERC20_BENZ,mixin.GetAssetId("USDT"))
       }
+     if cmd == "s1" {
+       fmt.Print("Please input the price of XIN/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of XIN: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(mixin.GetAssetId("USDT"),"A",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("XIN",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo,abalance, " ", pToken, uPIN)
+       }
+     }
     }
    }
   }
