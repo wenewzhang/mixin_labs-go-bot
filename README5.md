@@ -1,7 +1,7 @@
-# How to list bitcoin order through Java
+# How to list bitcoin order through Go
 ![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
 
-Exincore is introduced in [last chapter](https://github.com/wenewzhang/mixin_labs-java-bot/blob/master/README4.md), you can exchange many crypto asset at market price and receive your asset in 1 seconds. If you want to trade asset at limited price, or trade asset is not supported by ExinCore now, OceanOne is the answer.
+Exincore is introduced in [last chapter](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README4.md), you can exchange many crypto asset at market price and receive your asset in 1 seconds. If you want to trade asset at limited price, or trade asset is not supported by ExinCore now, OceanOne is the answer.
 ## Solution Two: List your order on Ocean.One exchange
 [Ocean.one](https://github.com/mixinNetwork/ocean.one) is a decentralized exchange built on Mixin Network, it's almost the first time that a decentralized exchange gain the same user experience as a centralized one.
 
@@ -12,7 +12,7 @@ You can list any asset on OceanOne. Pay the asset you want to sell to OceanOne a
 * No listing process.
 
 ### Pre-request:
-You should  have created a bot based on Mixin Network. Create one by reading [Java Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-java-bot/blob/master/README.md).
+You should  have created a bot based on Mixin Network. Create one by reading [Go Bitcoin tutorial](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README.md).
 
 #### Install required packages
 [Chapter 4](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README4.md), assume it has installed before.
@@ -130,7 +130,7 @@ func GetOceanOneMarketPrice(asset_id string, base_asset string) ([]byte, error) 
 ```
 
 #### Create a memo to prepare order
-The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-java-bot/blob/master/README2.md) introduce transfer coins. But you need to let Ocean.one know which coin you want to buy.
+The chapter two: [Echo Bitcoin](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2.md) introduce transfer coins. But you need to let Ocean.one know which coin you want to buy.
 - **Side** "B" or "A", "B" for buy, "A" for Sell.
 - **AssetUUID** UUID of the asset you want to buy
 - **Price** If Side is "B", Price is AssetUUID; if Side is "A", Price is the asset which transfer to Ocean.one.

@@ -130,7 +130,7 @@ func GetOceanOneMarketPrice(asset_id string, base_asset string) ([]byte, error) 
 ```
 
 #### 交易前，创建一个Memo!
-在第二章里,[基于Mixin Network的 Java 比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-java-bot/blob/master/README2-zhchs.md), 我们学习过转帐，这儿我们介绍如何告诉Ocean.one，我们给它转帐的目的是什么，信息全部放在memo里.
+在第二章里,[基于Mixin Network的 Go 比特币开发教程: 机器人接受比特币并立即退还用户](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README2-zhchs.md), 我们学习过转帐，这儿我们介绍如何告诉Ocean.one，我们给它转帐的目的是什么，信息全部放在memo里.
 - **Side** 方向,"B" 或者 "A", "B"是购买, "A"是出售.
 - **AssetUUID** 目标虚拟资产的UUID.
 - **Price** 价格，如果操作方向是"B", 价格就是AssetUUID的价格; 如果操作方向是"B", 价格就是转给Ocean.one币的价格.
