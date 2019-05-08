@@ -628,7 +628,7 @@ func main() {
                                         messenger.UuidNewV4().String(),
                                         uPIN,pToken,userID,sID,priKey)
          fmt.Println(string(transInfo))
-       }
+       } else { fmt.Println("Not enough XIN!") }
      }
      if cmd == "b1" {
        fmt.Print("Please input the price of XIN/USDT: ")
@@ -656,7 +656,7 @@ func main() {
                                         messenger.UuidNewV4().String(),
                                         uPIN,pToken,userID,sID,priKey)
          fmt.Println(string(transInfo))
-       }
+       } else { fmt.Println("Not enough USDT!") }
      }//end of b1
      if cmd == "c" {
        fmt.Print("Please input the Order id: ")
@@ -664,9 +664,10 @@ func main() {
        scanner.Scan()
        ocmd = scanner.Text()
        fmt.Println(ocmd)
+       orderid, _ := uuid.FromString(ocmd)
        memoOcean,_ :=
          msgpack.Marshal(OceanOrderCancel{
-           O: packUuid,
+           O: orderid,
          })
        omemoCancel := base64.StdEncoding.EncodeToString(memoOcean)
        priKey, pToken, sID, userID, uPIN := GetWalletInfo()
