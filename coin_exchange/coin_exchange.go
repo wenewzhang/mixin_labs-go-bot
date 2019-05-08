@@ -618,11 +618,49 @@ func main() {
        fbalance, _ := strconv.ParseFloat(balance,64)
        abalance, _ := strconv.ParseFloat(acmd,64)
        if fbalance > 0 && fbalance >= abalance {
-         fmt.Println(omemo,abalance, " ", pToken, uPIN)
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        mixin.GetAssetId("XIN"),
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
        }
      }
+     if cmd == "b1" {
+       fmt.Print("Please input the price of XIN/USDT: ")
+       var pcmd string
+       var acmd string
+       scanner.Scan()
+       pcmd = scanner.Text()
+       fmt.Println(pcmd)
+       fmt.Print("Please input the amount of USDT: ")
+       scanner.Scan()
+       acmd = scanner.Text()
+       fmt.Println(acmd)
+       omemo := generateOceanOrderMemo(mixin.GetAssetId("XIN"),"B",pcmd)
+       priKey, pToken, sID, userID, uPIN := GetWalletInfo()
+       balance := ReadAssetBalance("USDT",userID,sID,priKey)
+       fmt.Println(balance)
+       fbalance, _ := strconv.ParseFloat(balance,64)
+       abalance, _ := strconv.ParseFloat(acmd,64)
+       if fbalance > 0 && fbalance >= abalance {
+         fmt.Println(omemo)
+         transInfo, _ := mixin.Transfer(OCEANONE_BOT,
+                                        acmd,
+                                        mixin.GetAssetId("USDT"),
+                                        omemo,
+                                        messenger.UuidNewV4().String(),
+                                        uPIN,pToken,userID,sID,priKey)
+         fmt.Println(string(transInfo))
+       }
+     }//end of b1
+     if cmd == "c" {
+       
+     }
     }
-   }
+   }//end of Ocean.one exchange
   }
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
 }
