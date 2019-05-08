@@ -232,7 +232,7 @@ func main() {
   PromptMsg += "5: pay 0.0001 BTC buy USDT\n6: Read ExinCore Price(USDT)\n7: Read ExinCore Price(BTC)\n"
 	PromptMsg += "8: pay 1 USDT buy BTC\n9: Read Snapshots\na: Verify bot PIN code\nv: Verify wallet PIN code\n"
   PromptMsg += "ab: Read Bot Assets\naw: Read Wallet Assets\n";
-	PromptMsg += "q: Exit \nMake your choose:"
+	PromptMsg += "o: Ocean.One Exchange\nq: Exit \nMake your choose:"
 	for  {
 	 fmt.Print(PromptMsg)
 	 var cmd string
@@ -511,6 +511,21 @@ func main() {
             log.Fatal(err)
     }
     fmt.Println(string(QueryInfo))
+  }
+  if cmd == "o" {
+    scanner   := bufio.NewScanner(os.Stdin)
+    var PromptMsg string
+    PromptMsg  = "1:  Fetch XIN/USDT orders\ns1: Sell XIN/USDT\nb1: Buy XIN/USDT\n"
+    PromptMsg += "2:  Fetch ERC20(Benz)/USDT orders\ns2: Sell Benz/USDT\nb2: Buy Benz/USDT\n"
+    PromptMsg += "c: Cancel Order\nq:  Exit\n"
+    for  {
+     fmt.Print(PromptMsg)
+     var cmd string
+     scanner.Scan()
+     cmd = scanner.Text()
+     if cmd == "q" { break }
+
+   }
   }
 	}
   // c6d0c728-2624-429b-8e0d-d9d19b6592fa
