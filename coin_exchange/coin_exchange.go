@@ -490,11 +490,13 @@ func main() {
     for _, v := range (AssetsInfo["data"].([]interface{})) {
       if v.(map[string]interface{})["symbol"] == "EOS" {
         fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["asset_id"]," ",
                     v.(map[string]interface{})["account_name"]," ",
                     v.(map[string]interface{})["account_tag"]," ",
                     v.(map[string]interface{})["balance"])
       } else {
         fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["asset_id"]," ",
                     v.(map[string]interface{})["public_key"]," ",
                     v.(map[string]interface{})["balance"])
       }
@@ -516,11 +518,13 @@ func main() {
     for _, v := range (AssetsInfo["data"].([]interface{})) {
       if v.(map[string]interface{})["symbol"] == "EOS" {
         fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["asset_id"]," ",
                     v.(map[string]interface{})["account_name"]," ",
                     v.(map[string]interface{})["account_tag"]," ",
                     v.(map[string]interface{})["balance"])
       } else {
         fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                    v.(map[string]interface{})["asset_id"]," ",
                     v.(map[string]interface{})["public_key"]," ",
                     v.(map[string]interface{})["balance"])
       }

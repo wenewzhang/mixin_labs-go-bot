@@ -9,7 +9,7 @@ There is a [ERC20 token](https://etherscan.io/token/0xc409b5696c5f9612e194a582e1
 Deposit some coin to your wallet, and then use **ReadAssets** API fetch the asset UUID which Mixin Network gave it.
 
 ### Get the ERC-20 compliant coin UUID
-The **getAssets** API return json data, for example:
+The **ReadAssets** API return json data, for example:
 
 - **asset_id** UUID of this coin
 - **public_key** The wallet address for this coin
@@ -31,11 +31,13 @@ if cmd == "aw" {
   for _, v := range (AssetsInfo["data"].([]interface{})) {
     if v.(map[string]interface{})["symbol"] == "EOS" {
       fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                  v.(map[string]interface{})["asset_id"]," ",
                   v.(map[string]interface{})["account_name"]," ",
                   v.(map[string]interface{})["account_tag"]," ",
                   v.(map[string]interface{})["balance"])
     } else {
       fmt.Println(v.(map[string]interface{})["symbol"]," ",
+                  v.(map[string]interface{})["asset_id"]," ",
                   v.(map[string]interface{})["public_key"]," ",
                   v.(map[string]interface{})["balance"])
     }
