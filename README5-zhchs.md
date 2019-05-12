@@ -1,4 +1,4 @@
-# 通过 Go 买卖Bitcoin
+# 通过 Go 在去中心化交易所OceanOne上挂单买卖Bitcoin
 ![cover](https://github.com/wenewzhang/mixin_labs-go-bot/raw/master/Bitcoin_go.jpg)
 
 上一章介绍了[Exincore](https://github.com/wenewzhang/mixin_labs-go-bot/blob/master/README4-zhchs.md)，你可以1秒完成资产的市价买卖。如果你想限定价格买卖，或者买卖一些exincore不支持的资产，你需要OceanOne。
